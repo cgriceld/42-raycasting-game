@@ -1,6 +1,8 @@
 #include "maze.h"
 
-void	error_manager(const int code)
+static void args_error_manager(const int code, const char *comment)
 {
-	if 
+	ft_putendl_fd("Error", 1);
+	if (code == ARGS_NUM)
+		ft_putendl_fd(comment, 1);
 }
