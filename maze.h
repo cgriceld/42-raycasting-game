@@ -7,9 +7,8 @@
 /*
 ** Input arguments errors
 */
-# define ARGS_NUM 0
+# define ARGS 0
 # define ARGS_NUM_COMMENT "Wrong number of arguments, try again: ./maze *.cub [--save]"
-# define MAP_NAME 1
 # define MAP_NAME_COMMENT "Check the extension of the map file, it should be .cub"
 
 #include "libft/libft.h"

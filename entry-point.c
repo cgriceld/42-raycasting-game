@@ -5,9 +5,10 @@
 static int	correct_args(int argc, char **argv, size_t filemap_len)
 {
 	if (argc > 3 || argc < 2)
-		args_error_manager(ARGS_NUM, ARGS_NUM_COMMENT);
+		error_manager(ARGS, ARGS_NUM_COMMENT);
 	else if (filemap_len < 5 || ft_strendcmp(argv[1], ".cub", filemap_len - 4))
-		args_error_manager(MAP_NAME, MAP_NAME_COMMENT);
+		error_manager(ARGS, MAP_NAME_COMMENT);
+	
 }
 
 int	main(int argc, char **argv)
