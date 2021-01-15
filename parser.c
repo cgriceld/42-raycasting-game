@@ -1,6 +1,9 @@
 #include "maze.h"
 
-void	parse()
+void	parser(const char *map_file)
 {
+	t_map *map;
 
+	if (!init_map(&map, map_file))
+		return ;
 }
