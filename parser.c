@@ -6,4 +6,5 @@ void	parser(const char *map_file)
 
 	if (!init_map(&map, map_file))
 		return ;
+	while (get_next_line())
 }

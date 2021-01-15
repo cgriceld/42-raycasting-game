@@ -8,4 +8,5 @@ int	init_map(t_map **map, const char *map_file)
 	(*map)->fd = open(map_file, O_RDONLY);
 	if ((*map)->fd == -1)
 		return (map_error(NEG_FD, map));
+	return (true);
 }
