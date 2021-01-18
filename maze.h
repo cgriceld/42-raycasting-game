@@ -18,11 +18,14 @@
 ** Parsing errors.
 */
 # define GNL_ERROR "Error encountered while reading .cub file, try again"
-# define UNKNOWN_CH "Unknown symbols in .cub file, try again"
+# define UNKNOWN_CH "Unknown symbols or wrong syntax in .cub file, try again"
 # define RES_ERR "Error with R params in .cub file (negative, zero or unknown symbols), try again"
 # define RES_DOUBLE "Two configurations for R in .cub file, try again"
 # define PATH_DOUBLE "Two configurations for path (NO, WE, SO EA or S) in .cub file, try again"
 # define INVALID_PATH "Invalid path for texture in .cub file, try again"
+# define COLOR_DOUBLE "Two configurations for F or C in .cub file, try again"
+# define COLOR_ERR "Error with color params in F or C (negative, unknown symbols or delimiter isn't ','), try again"
+# define COLOR_0255 "Color params for F or C aren't in [0, 255] range, try again"
 
 /*
 ** Malloc errors.
@@ -33,14 +36,20 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-typedef enum e_directions
+typedef enum e_ttr
 {
 	NO,
 	EA,
 	SO,
 	WE,
 	SPRITE
-}			t_directions;
+}			t_ttr;
+
+typedef enum e_clr
+{
+	FLOOR,
+	CEILING
+}			t_clr;
 
 /*
 ** Struct for parsing.
@@ -54,6 +63,7 @@ typedef struct	s_map
 	int		res_x;
 	int		res_y;
 	char	**paths;
+	int		colors[2];
 }				t_map;
 
 /*

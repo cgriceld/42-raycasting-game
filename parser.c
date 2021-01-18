@@ -1,4 +1,5 @@
 #include "maze.h"
+#include <stdio.h>
 
 static void parse_resolution(t_map *map)
 {
@@ -14,7 +15,7 @@ static void parse_resolution(t_map *map)
 	map->res_y = map->res_y > DEFAULT_RES_Y ? DEFAULT_RES_Y : map->res_y;
 }
 
-static void parse_map(t_map *map, int side)
+static void parse_ttr(t_map *map, int side)
 {
 	int test_fd;
 
@@ -25,6 +26,41 @@ static void parse_map(t_map *map, int side)
 	map->paths[side] = ft_strdup(map->split[1]);
 	if (!map->paths[side])
 		map_error(MALLOC_PARSE, &map);
+}
+
+static int get_rgb(int red, int green, int blue)
+{
+	return ((red <= 255 && green <= 255 && blue <= 255) ? \
+	(red << 16 | green << 8 | blue) : -1);
+}
+
+static void parse_color(t_map *map, int side)
+{
+	char **colors;
+	size_t tokens;
+
+	if (map->colors[side])
+		map_error(COLOR_DOUBLE, &map);
+	colors = ft_split(map->split[1], ',');
+	if (!colors)
+		map_error(MALLOC_PARSE, &map);
+	tokens = twodarr_len((void **)colors);
+	if (tokens != 3 || !(ft_strdigits(colors[0])) || \
+		!(ft_strdigits(colors[1])) || !(ft_strdigits(colors[2])))
+	{
+		twodarr_free((void **)colors, tokens);
+		map_error(COLOR_ERR, &map);
+	}
+	map->colors[side] = get_rgb(ft_atoi(colors[0]), ft_atoi(colors[1]), \
+								ft_atoi(colors[2]));
+	twodarr_free((void **)colors, tokens);
+	if (map->colors[side] < 0)
+		map_error(COLOR_0255, &map);
+	
+	// printf("transparent : %d\n", (map->colors[side] & (0xFF << 24)));
+	// printf("red : %d\n", (map->colors[side] & (0xFF << 16)));
+	// printf("green : %d\n", (map->colors[side] & (0xFF << 8)));
+	// printf("blue : %d\n", (map->colors[side] & 0xFF));
 }
 
 static void process_line(t_map *map)
@@ -40,18 +76,25 @@ static void process_line(t_map *map)
 	first = ft_strlen(map->split[0]); // len of first param
 	if (first == 1 && map->tokens == 3 && map->split[0][0] == 'R')
 		parse_resolution(map);
-	if (first == 1 && map->tokens == 2 && map->split[0][0] == 'S')
-		parse_map(map, SPRITE);
+	else if (first == 1 && map->tokens == 2)
+	{
+		if (map->split[0][0] == 'S')
+			parse_ttr(map, SPRITE);
+		else if (map->split[0][0] == 'F')
+			parse_color(map, FLOOR);
+		else if (map->split[0][0] == 'C')
+			parse_color(map, CEILING);
+	}
 	else if (first == 2 && map->tokens == 2)
 	{
 		if (!ft_strncmp(map->split[0], "NO", 2))
-			parse_map(map, NO);
+			parse_ttr(map, NO);
 		else if (!ft_strncmp(map->split[0], "EA", 2))
-			parse_map(map, EA);
+			parse_ttr(map, EA);
 		else if (!ft_strncmp(map->split[0], "SO", 2))
-			parse_map(map, SO);
+			parse_ttr(map, SO);
 		else if (!ft_strncmp(map->split[0], "WE", 2))
-			parse_map(map, WE);
+			parse_ttr(map, WE);
 	}
 	else
 		map_error(UNKNOWN_CH, &map);
