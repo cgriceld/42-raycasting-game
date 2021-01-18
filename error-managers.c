@@ -1,25 +1,29 @@
 #include "maze.h"
 
-int lite_error(char *comment)
+void lite_error(char *comment)
 {
 	ft_putendl_fd("Error", 1);
 	ft_putendl_fd(comment, 1);
-	return (false);
+	exit(EXIT_FAILURE);
 }
 
-int map_error(char *comment, t_map **map)
+// void free_split(t_map **map)
+// {
+// 	while ((*map)->tokens--)
+// 		free((*map)->split[(*map)->tokens]);
+// 	free((*map)->split);
+// }
+
+void map_error(char *comment, t_map **map)
 {
-	// free map malloced contents
 	if ((*map)->line)
 		free((*map)->line);
 	if ((*map)->split)
-	{
-		while ((*map)->tokens--)
-			free((*map)->split[(*map)->tokens]);
-		free((*map)->split);
-	}
+		twodarr_free((void **)(*map)->split, (*map)->tokens);
+	if ((*map)->paths)
+		twodarr_free((void **)(*map)->paths, 5);
 	if ((*map)->fd != -1)
 		close((*map)->fd);
 	free(*map);
-	return (lite_error(comment));
+	lite_error(comment);
 }

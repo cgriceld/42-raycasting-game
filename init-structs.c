@@ -1,14 +1,23 @@
 #include "maze.h"
 
-int	init_map(t_map **map, const char *map_file)
+void	init_map(t_map **map, const char *map_file)
 {
 	*map = (t_map *)malloc(sizeof(t_map));
 	if (!*map)
-		return (lite_error(MALLOC_TMAP_INIT));
+		lite_error(MALLOC_PARSE);
 	(*map)->line = NULL;
 	(*map)->split = NULL;
+	(*map)->paths = (char **)malloc(sizeof(char *) * 5);
+	if (!(*map)->paths)
+		map_error(MALLOC_PARSE, map);
+	(*map)->paths[NO] = NULL;
+	(*map)->paths[EA] = NULL;
+	(*map)->paths[SO] = NULL;
+	(*map)->paths[WE] = NULL;
+	(*map)->paths[SPRITE] = NULL;
 	(*map)->fd = open(map_file, O_RDONLY);
 	if ((*map)->fd == -1)
-		return (map_error(NEG_FD, map));
-	return (true);
+		map_error(NEG_FD, map);
+	(*map)->res_x = 0;
+	(*map)->res_y = 0;
 }

@@ -11,6 +11,17 @@ size_t		twodarr_len(void **arr)
 	return (len);
 }
 
+//to libft
+void		twodarr_free(void **arr, int len)
+{
+	while (len--)
+	{
+		if (arr[len])
+			free(arr[len]);
+	}
+	free(arr);
+}
+
 size_t	ft_strlen(const char *s)
 {
 	const char *str;
@@ -337,9 +348,53 @@ void	ft_putendl_fd(char *s, int fd)
 	}
 }
 
+int	ft_isdigit(int c)
+{
+	return (c >= 48 && c <= 57);
+}
+
+// to libft
 int		ft_strdigits(char *str)
 {
 	while (*str && ft_isdigit(*str))
 		str++;
 	return (!*str ? 1 : 0);
+}
+
+static int	ft_issign(const char c)
+{
+	return (c == 43 || c == 45);
+}
+
+/*
+** Returns 1 if c is \t, \n, \v, \f, \r or ' '.
+*/
+
+static int	ft_isspace(const char c)
+{
+	return ((c >= 9 && c <= 13) || c == 32);
+}
+
+int			ft_atoi(const char *str)
+{
+	long long int	prevn;
+	long long int	n;
+	int				sign;
+
+	n = 0;
+	sign = 1;
+	while (*str && ft_isspace(*str))
+		str++;
+	if (ft_issign(*str) && *str++ == '-')
+		sign = -1;
+	while (*str && ft_isdigit(*str))
+	{
+		prevn = n;
+		n = 10 * n + sign * (*str++ - 48); //*
+		if (n > prevn && sign == -1) //**
+			return (0);
+		if (n < prevn && sign == 1)
+			return (-1);
+	}
+	return (n);
 }
