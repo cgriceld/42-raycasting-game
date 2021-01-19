@@ -15,7 +15,7 @@
 # define NEG_FD "Error encountered when try to open .cub file, try again"
 
 /*
-** Parsing errors.
+** Config parsing errors.
 */
 # define GNL_ERROR "Error encountered while reading .cub file, try again"
 # define UNKNOWN_CH "Unknown symbols or wrong syntax in .cub file, try again"
@@ -26,6 +26,12 @@
 # define COLOR_DOUBLE "Two configurations for F or C in .cub file, try again"
 # define COLOR_ERR "Error with color params in F or C (negative, unknown symbols or delimiter isn't ','), try again"
 # define COLOR_0255 "Color params for F or C aren't in [0, 255] range, try again"
+
+/*
+** Map parsing errors.
+*/
+# define MAP_SPACES "It should be no spaces in the map in .cub, try again"
+
 
 /*
 ** Malloc errors.
@@ -47,6 +53,7 @@ typedef enum e_ttr
 
 typedef enum e_clr
 {
+	GET_ALL,
 	FLOOR,
 	CEILING
 }			t_clr;
@@ -63,7 +70,7 @@ typedef struct	s_map
 	int		res_x;
 	int		res_y;
 	char	**paths;
-	int		colors[2];
+	int		colors[3];
 }				t_map;
 
 /*

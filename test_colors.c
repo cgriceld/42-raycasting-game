@@ -34,7 +34,7 @@ int main(void)
 	// int color;
 	// create_trgb(0, 225, 225, 225, &color);
 
-	int color = create_trgb(0, 225, 225, 225);
+	int color = create_trgb(0, 0, 0, 0);
 
 	printf("%d\n", get_t(color));
 	printf("%d\n", get_r(color));

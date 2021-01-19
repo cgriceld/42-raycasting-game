@@ -56,24 +56,16 @@ static void parse_color(t_map *map, int side)
 	twodarr_free((void **)colors, tokens);
 	if (map->colors[side] < 0)
 		map_error(COLOR_0255, &map);
-	
+	map->colors[GET_ALL]++;
+
 	// printf("transparent : %d\n", (map->colors[side] & (0xFF << 24)));
 	// printf("red : %d\n", (map->colors[side] & (0xFF << 16)));
 	// printf("green : %d\n", (map->colors[side] & (0xFF << 8)));
 	// printf("blue : %d\n", (map->colors[side] & 0xFF));
 }
 
-static void process_line(t_map *map)
+static void process_line(t_map *map, size_t first)
 {
-	size_t first;
-
-	map->split = ft_split(map->line, ' ');
-	if (!map->split)
-		map_error(MALLOC_PARSE, &map);
-	map->tokens = twodarr_len((void **)map->split);
-	if (!map->tokens) // empty string, [[NULL]]
-		return ; // continue reading
-	first = ft_strlen(map->split[0]); // len of first param
 	if (first == 1 && map->tokens == 3 && map->split[0][0] == 'R')
 		parse_resolution(map);
 	else if (first == 1 && map->tokens == 2)
@@ -100,9 +92,35 @@ static void process_line(t_map *map)
 		map_error(UNKNOWN_CH, &map);
 }
 
-void	process_parsing(t_map **map)
+static void process_map(t_map *map)
 {
-	process_line(*map);
+	if (map->tokens != 1)
+		map_error(MAP_SPACES, &map);
+	
+}
+
+static int map_ready(t_map *map)
+{
+	return (map->res_x && map->res_y && map->paths[NO] && map->paths[EA] && \
+			map->paths[SO] && map->paths[WE] && map->paths[SPRITE] && \
+			map->colors[GET_ALL] == 2);
+}
+
+static void	process_parsing(t_map **map)
+{
+	size_t first;
+
+	if (map_ready(map))
+		process_map(map);
+	(*map)->split = ft_split((*map)->line, ' ');
+	if (!(*map)->split)
+		map_error(MALLOC_PARSE, &map);
+	(*map)->tokens = twodarr_len((void **)(*map)->split);
+	if ((*map)->tokens) // not empty line
+	{
+		first = ft_strlen((*map)->split[0]); // len of first param
+		process_line(*map, first);
+	}
 	twodarr_free((void **)(*map)->split, (*map)->tokens);
 	free((*map)->line);
 }
