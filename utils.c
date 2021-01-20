@@ -1,5 +1,15 @@
 #include "maze.h"
 
+char	*ft_strchr(const char *s, int c)
+{
+	char ch;
+
+	ch = (char)c;
+	while (*s && *s != ch)
+		s++;
+	return (*s == ch ? (char *)s : NULL);
+}
+
 //to libft
 size_t		twodarr_len(void **arr)
 {
@@ -20,6 +30,14 @@ void		twodarr_free(void **arr, int len)
 			free(arr[len]);
 	}
 	free(arr);
+}
+
+//to libft
+int		ft_strchset(char *s, char *set)
+{
+	while (*s && ft_strchr(set, *s))
+		s++;
+	return (!*s ? 1 : 0);
 }
 
 size_t	ft_strlen(const char *s)

@@ -22,6 +22,8 @@ void map_error(char *comment, t_map **map)
 		twodarr_free((void **)(*map)->split, (*map)->tokens);
 	if ((*map)->paths)
 		twodarr_free((void **)(*map)->paths, 5);
+	if ((*map)->raw_map)
+		free((*map)->raw_map);
 	if ((*map)->fd != -1)
 		close((*map)->fd);
 	free(*map);

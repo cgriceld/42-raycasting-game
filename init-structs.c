@@ -23,4 +23,6 @@ void	init_map(t_map **map, const char *map_file)
 	(*map)->colors[CEILING] = 0;
 	(*map)->res_x = 0;
 	(*map)->res_y = 0;
+	(*map)->raw_map = NULL;
+	(*map)->map_done = 0;
 }

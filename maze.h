@@ -6,6 +6,7 @@
 
 # define DEFAULT_RES_X 5120
 # define DEFAULT_RES_Y 2880
+# define MAP_SET " 012NSEW"
 
 /*
 ** Input arguments errors.
@@ -18,7 +19,7 @@
 ** Config parsing errors.
 */
 # define GNL_ERROR "Error encountered while reading .cub file, try again"
-# define UNKNOWN_CH "Unknown symbols or wrong syntax in .cub file, try again"
+# define UNKNOWN_CH "Syntax error in .cub file: unknown symbols, config missing before map, map not in the end, etc."
 # define RES_ERR "Error with R params in .cub file (negative, zero or unknown symbols), try again"
 # define RES_DOUBLE "Two configurations for R in .cub file, try again"
 # define PATH_DOUBLE "Two configurations for path (NO, WE, SO EA or S) in .cub file, try again"
@@ -26,12 +27,13 @@
 # define COLOR_DOUBLE "Two configurations for F or C in .cub file, try again"
 # define COLOR_ERR "Error with color params in F or C (negative, unknown symbols or delimiter isn't ','), try again"
 # define COLOR_0255 "Color params for F or C aren't in [0, 255] range, try again"
+# define NO_MAP "Map missing in .cub file or consists of one line only, try again"
 
 /*
 ** Map parsing errors.
 */
-# define MAP_SPACES "It should be no spaces in the map in .cub, try again"
-
+# define MAP_EMPTY_LINE "It should be no empty lines inside or below the map in .cub, try again"
+# define UNKNOWN_CH_MAP "Map should consists only from [ 012NSEW] characters, try again"
 
 /*
 ** Malloc errors.
@@ -71,6 +73,9 @@ typedef struct	s_map
 	int		res_y;
 	char	**paths;
 	int		colors[3];
+	int		reading;
+	char	*raw_map;
+	int		map_done;
 }				t_map;
 
 /*
@@ -107,9 +112,10 @@ void	ft_putendl_fd(char *s, int fd);
 int		ft_strdigits(char *str);
 int	ft_isdigit(int c);
 int			ft_atoi(const char *str);
+int		ft_strchset(char *s, char *set);
+char	*ft_strchr(const char *s, int c);
 
 void	init_map(t_map **map, const char *map_file);
-void	process_parsing(t_map **map);
 void	parser(const char *map_file);
 
 

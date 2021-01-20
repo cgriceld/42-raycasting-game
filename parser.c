@@ -92,13 +92,6 @@ static void process_line(t_map *map, size_t first)
 		map_error(UNKNOWN_CH, &map);
 }
 
-static void process_map(t_map *map)
-{
-	if (map->tokens != 1)
-		map_error(MAP_SPACES, &map);
-	
-}
-
 static int map_ready(t_map *map)
 {
 	return (map->res_x && map->res_y && map->paths[NO] && map->paths[EA] && \
@@ -106,36 +99,74 @@ static int map_ready(t_map *map)
 			map->colors[GET_ALL] == 2);
 }
 
-static void	process_parsing(t_map **map)
+static void get_raw_map(t_map *map)
+{
+	char *tmp_line;
+	char *tmp_map;
+
+	if (map->reading < 0)
+		map_error(GNL_ERROR, &map);
+	if (!*map->line)
+		map_error(MAP_EMPTY_LINE, &map);
+	if (!ft_strchset(map->line, MAP_SET))
+		map_error(UNKNOWN_CH_MAP, &map);
+	tmp_line = ft_strjoin(map->line, "\n");
+	if (!tmp_line)
+		map_error(MALLOC_PARSE, &map);
+	tmp_map = map->raw_map;
+	map->raw_map = ft_strjoin(map->raw_map, tmp_line);
+	free(tmp_map);
+	free(tmp_line);
+	if (!map->raw_map)
+		map_error(MALLOC_PARSE, &map);
+	free(map->line);
+	map->line = NULL;
+}
+
+static void process_map(t_map *map)
+{
+	if (!ft_strchset(map->line, MAP_SET))
+		map_error(UNKNOWN_CH_MAP, &map);
+	map->raw_map = ft_strjoin(map->line , "\n");
+	if (!map->raw_map)
+		map_error(MALLOC_PARSE, &map);
+	free(map->line);
+	map->line = NULL;
+	while ((map->reading = get_next_line(map->fd, &(map->line))))
+		get_raw_map(map);
+	get_raw_map(map);
+	map->map_done++;
+}
+
+static void	process_parsing(t_map *map)
 {
 	size_t first;
 
-	if (map_ready(map))
-		process_map(map);
-	(*map)->split = ft_split((*map)->line, ' ');
-	if (!(*map)->split)
+	map->split = ft_split(map->line, ' ');
+	if (!map->split)
 		map_error(MALLOC_PARSE, &map);
-	(*map)->tokens = twodarr_len((void **)(*map)->split);
-	if ((*map)->tokens) // not empty line
-	{
-		first = ft_strlen((*map)->split[0]); // len of first param
-		process_line(*map, first);
-	}
-	twodarr_free((void **)(*map)->split, (*map)->tokens);
-	free((*map)->line);
+	map->tokens = twodarr_len((void **)map->split);
+	first = ft_strlen(map->split[0]); // len of first param
+	process_line(map, first);
+	twodarr_free((void **)map->split, map->tokens);
+	map->split = NULL;
+	free(map->line);
+	map->line = NULL;
 }
 
 void	parser(const char *map_file)
 {
 	t_map	*map;
-	int		reading;
 
 	init_map(&map, map_file);
-	while ((reading = get_next_line(map->fd, &(map->line))))
+	while ((map->reading = get_next_line(map->fd, &(map->line))))
 	{
-		if (reading < 0)
+		if (map->reading < 0)
 			map_error(GNL_ERROR, &map);
-		process_parsing(&map);
+		if (!(*map->line)) // empty line
+			continue ;
+		map_ready(map) ? process_map(map) : process_parsing(map);
 	}
-	process_parsing(&map);
+	if (!map->reading && !map->map_done)
+		map_error(NO_MAP, &map);
 }
