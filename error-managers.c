@@ -19,11 +19,13 @@ void map_error(char *comment, t_map **map)
 	if ((*map)->line)
 		free((*map)->line);
 	if ((*map)->split)
-		twodarr_free((void **)(*map)->split, (*map)->tokens);
+		ft_twodarr_free(&(*map)->split, (*map)->tokens);
 	if ((*map)->paths)
-		twodarr_free((void **)(*map)->paths, 5);
+		ft_twodarr_free(&(*map)->paths, 5);
 	if ((*map)->raw_map)
 		free((*map)->raw_map);
+	if ((*map)->map)
+		ft_twodarr_free(&(*map)->map, ++(*map)->tokens);
 	if ((*map)->fd != -1)
 		close((*map)->fd);
 	free(*map);

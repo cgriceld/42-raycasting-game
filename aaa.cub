@@ -1,15 +1,11 @@
 R 1920 1080
 NO ./maps/path
 SO ./maps/path
-
 WE ./maps/path
 EA ./maps/path
-
 S ./maps/path
 F 220,100,0
 C 225,30,0
-
-
-     1180N
-00111
-
+1101
+1N01
+1111

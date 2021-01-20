@@ -7,7 +7,7 @@
 # define DEFAULT_RES_X 5120
 # define DEFAULT_RES_Y 2880
 # define MAP_SET " 012NSEW"
-
+# define PLAYER_SET "NSEW"
 /*
 ** Input arguments errors.
 */
@@ -27,13 +27,16 @@
 # define COLOR_DOUBLE "Two configurations for F or C in .cub file, try again"
 # define COLOR_ERR "Error with color params in F or C (negative, unknown symbols or delimiter isn't ','), try again"
 # define COLOR_0255 "Color params for F or C aren't in [0, 255] range, try again"
-# define NO_MAP "Map missing in .cub file or consists of one line only, try again"
 
 /*
 ** Map parsing errors.
 */
+# define NO_MAP "Map missing in .cub file or consists of one line only, try again"
 # define MAP_EMPTY_LINE "It should be no empty lines inside or below the map in .cub, try again"
-# define UNKNOWN_CH_MAP "Map should consists only from [ 012NSEW] characters, try again"
+# define UNKNOWN_CH_MAP "Map in .cub should consists only from [ 012NSEW] characters, try again"
+# define TWO_PLAYERS ".cub: map contains two players (two [NSEW] symbols), try again"
+# define NO_PLAYER ".cub: no player found in map, try again"
+# define MAP_HOLE ".cub: map isn't surrounded by walls or has spaces inside, try again"
 
 /*
 ** Malloc errors.
@@ -44,21 +47,29 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-typedef enum e_ttr
+typedef enum e_texture
 {
 	NO,
 	EA,
 	SO,
 	WE,
 	SPRITE
-}			t_ttr;
+}			t_texture;
 
-typedef enum e_clr
+typedef enum e_color
 {
-	GET_ALL,
+	GET_FLOOR,
+	GET_CEILING,
 	FLOOR,
 	CEILING
-}			t_clr;
+}			t_color;
+
+typedef enum e_person
+{
+	X,
+	Y,
+	GET_ALL
+}			t_person;
 
 /*
 ** Struct for parsing.
@@ -75,16 +86,11 @@ typedef struct	s_map
 	int		colors[3];
 	int		reading;
 	char	*raw_map;
+	char	**map;
+	int		player[3];
+	int		initdir[2];
 	int		map_done;
 }				t_map;
-
-/*
-** Struct for raycasting.
-*/
-typedef struct	s_person
-{
-	
-}				t_person;
 
 /*
 ** Struct for mlx stuff.
@@ -99,8 +105,8 @@ typedef struct	s_mlx_manager
 }				t_mlx_manager;
 
 // to libft
-size_t		twodarr_len(void **arr);
-void		twodarr_free(void **arr, int len);
+size_t		ft_twodarr_len(void **arr);
+void		ft_twodarr_free(char ***arr, int len);
 size_t	ft_strlen(const char *s);
 int	ft_strendcmp(const char *s1, const char *s2, int n);
 char	*ft_strdup(const char *s1);
@@ -112,8 +118,10 @@ void	ft_putendl_fd(char *s, int fd);
 int		ft_strdigits(char *str);
 int	ft_isdigit(int c);
 int			ft_atoi(const char *str);
-int		ft_strchset(char *s, char *set);
+int		ft_strinset(char *s, char *set);
 char	*ft_strchr(const char *s, int c);
+void	ft_ptr_free(char **ptr);
+char		*ft_strchrset(char *s, char *set);
 
 void	init_map(t_map **map, const char *map_file);
 void	parser(const char *map_file);

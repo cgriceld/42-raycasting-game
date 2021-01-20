@@ -1,5 +1,12 @@
 #include "maze.h"
 
+//to libft
+void	ft_ptr_free(char **ptr)
+{
+	free(*ptr);
+	*ptr = NULL;
+}
+
 char	*ft_strchr(const char *s, int c)
 {
 	char ch;
@@ -10,8 +17,19 @@ char	*ft_strchr(const char *s, int c)
 	return (*s == ch ? (char *)s : NULL);
 }
 
+//to libft, same to ft_strchr, only it
+char		*ft_strchrset(char *s, char *set)
+{
+	char *tmp;
+
+	tmp = s;
+	while (*s && !ft_strchr(set, *s))
+		s++;
+	return (!*s ? NULL : s);
+}
+
 //to libft
-size_t		twodarr_len(void **arr)
+size_t		ft_twodarr_len(void **arr)
 {
 	size_t len;
 
@@ -22,18 +40,22 @@ size_t		twodarr_len(void **arr)
 }
 
 //to libft
-void		twodarr_free(void **arr, int len)
+void		ft_twodarr_free(char ***arr, int len)
 {
+	char **tmp;
+
+	tmp = *arr;
 	while (len--)
 	{
-		if (arr[len])
-			free(arr[len]);
+		if (tmp[len])
+			free(tmp[len]);
 	}
-	free(arr);
+	free(tmp);
+	*arr = NULL;
 }
 
-//to libft
-int		ft_strchset(char *s, char *set)
+//to libft, check if all string consists only of characters from set
+int		ft_strinset(char *s, char *set)
 {
 	while (*s && ft_strchr(set, *s))
 		s++;

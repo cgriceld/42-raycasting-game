@@ -39,24 +39,25 @@ static void parse_color(t_map *map, int side)
 	char **colors;
 	size_t tokens;
 
-	if (map->colors[side])
+	if ((side == FLOOR && map->colors[GET_FLOOR]) || \
+		(side == CEILING && map->colors[GET_CEILING]))
 		map_error(COLOR_DOUBLE, &map);
 	colors = ft_split(map->split[1], ',');
 	if (!colors)
 		map_error(MALLOC_PARSE, &map);
-	tokens = twodarr_len((void **)colors);
+	tokens = ft_twodarr_len((void **)colors);
 	if (tokens != 3 || !(ft_strdigits(colors[0])) || \
 		!(ft_strdigits(colors[1])) || !(ft_strdigits(colors[2])))
 	{
-		twodarr_free((void **)colors, tokens);
+		ft_twodarr_free(&colors, tokens);
 		map_error(COLOR_ERR, &map);
 	}
 	map->colors[side] = get_rgb(ft_atoi(colors[0]), ft_atoi(colors[1]), \
 								ft_atoi(colors[2]));
-	twodarr_free((void **)colors, tokens);
+	ft_twodarr_free(&colors, tokens);
 	if (map->colors[side] < 0)
 		map_error(COLOR_0255, &map);
-	map->colors[GET_ALL]++;
+	side == FLOOR ? map->colors[GET_FLOOR]++ : map->colors[GET_CEILING]++;
 
 	// printf("transparent : %d\n", (map->colors[side] & (0xFF << 24)));
 	// printf("red : %d\n", (map->colors[side] & (0xFF << 16)));
@@ -96,7 +97,49 @@ static int map_ready(t_map *map)
 {
 	return (map->res_x && map->res_y && map->paths[NO] && map->paths[EA] && \
 			map->paths[SO] && map->paths[WE] && map->paths[SPRITE] && \
-			map->colors[GET_ALL] == 2);
+			map->colors[GET_FLOOR] && map->colors[GET_CEILING]);
+}
+
+static void find_player(t_map *map)
+{
+	char *player;
+
+	if ((player = ft_strchrset(map->line, PLAYER_SET)))
+	{
+		if (map->player[GET_ALL])
+			map_error(TWO_PLAYERS, &map);
+		map->player[X] = map->tokens;
+		map->player[Y] = player - map->line;
+		if (*player == 'N')
+		{
+			map->initdir[X] = 0;
+			map->initdir[Y] = 1;
+		}
+		else if (*player == 'E')
+		{
+			map->initdir[X] = 1;
+			map->initdir[Y] = 0;
+		}
+		else if (*player == 'S')
+		{
+			map->initdir[X] = 0;
+			map->initdir[Y] = -1;
+		}
+		else
+		{
+			map->initdir[X] = -1;
+			map->initdir[Y] = 0;
+		}
+		map->player[GET_ALL]++;
+	}
+}
+
+static void find_sprite(t_map *map)
+{
+	// if (ft_strchr(map->line, '2'))
+	// {
+
+	// }
 }
 
 static void get_raw_map(t_map *map)
@@ -108,8 +151,11 @@ static void get_raw_map(t_map *map)
 		map_error(GNL_ERROR, &map);
 	if (!*map->line)
 		map_error(MAP_EMPTY_LINE, &map);
-	if (!ft_strchset(map->line, MAP_SET))
+	if (!ft_strinset(map->line, MAP_SET))
 		map_error(UNKNOWN_CH_MAP, &map);
+	map->tokens++;
+	find_player(map);
+	find_sprite(map);
 	tmp_line = ft_strjoin(map->line, "\n");
 	if (!tmp_line)
 		map_error(MALLOC_PARSE, &map);
@@ -119,22 +165,46 @@ static void get_raw_map(t_map *map)
 	free(tmp_line);
 	if (!map->raw_map)
 		map_error(MALLOC_PARSE, &map);
-	free(map->line);
-	map->line = NULL;
+	ft_ptr_free(&map->line);
+}
+
+static void dfs_map(t_map *map, int i, int j)
+{
+	size_t j_len;
+
+	if (i < 0 || i > map->tokens || j < 0)
+		map_error(MAP_HOLE, &map);
+	j_len = ft_strlen(map->map[i]);
+	j_len--;
+	if (j > j_len)
+		map_error(MAP_HOLE, &map);
+	if (map->map[i][j] == '1')
+		return ;
+	if ((map->map[i][j] == '2') && (!i || i == map->tokens || !j || j == j_len))
+		map_error(MAP_HOLE, &map);
+	dfs_map(map, i - 1, j);
+	dfs_map(map, i, j - 1);
+	dfs_map(map, i + 1, j);
+	dfs_map(map, i, j + 1);
 }
 
 static void process_map(t_map *map)
 {
-	if (!ft_strchset(map->line, MAP_SET))
+	if (!ft_strinset(map->line, MAP_SET))
 		map_error(UNKNOWN_CH_MAP, &map);
 	map->raw_map = ft_strjoin(map->line , "\n");
 	if (!map->raw_map)
 		map_error(MALLOC_PARSE, &map);
-	free(map->line);
-	map->line = NULL;
+	ft_ptr_free(&map->line);
+	map->tokens = 0; // rows
 	while ((map->reading = get_next_line(map->fd, &(map->line))))
 		get_raw_map(map);
 	get_raw_map(map);
+	if (!map->player[GET_ALL])
+		map_error(NO_PLAYER, &map);
+	map->map = ft_split(map->raw_map, '\n');
+	ft_ptr_free(&map->raw_map);
+	dfs_map(map, map->player[X], map->player[Y]);
 	map->map_done++;
 }
 
@@ -145,13 +215,11 @@ static void	process_parsing(t_map *map)
 	map->split = ft_split(map->line, ' ');
 	if (!map->split)
 		map_error(MALLOC_PARSE, &map);
-	map->tokens = twodarr_len((void **)map->split);
+	map->tokens = ft_twodarr_len((void **)map->split);
 	first = ft_strlen(map->split[0]); // len of first param
 	process_line(map, first);
-	twodarr_free((void **)map->split, map->tokens);
-	map->split = NULL;
-	free(map->line);
-	map->line = NULL;
+	ft_twodarr_free(&map->split, map->tokens);
+	ft_ptr_free(&map->line);
 }
 
 void	parser(const char *map_file)
