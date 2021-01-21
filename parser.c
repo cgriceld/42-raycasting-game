@@ -49,12 +49,12 @@ static void parse_color(t_map *map, int side)
 	if (tokens != 3 || !(ft_strdigits(colors[0])) || \
 		!(ft_strdigits(colors[1])) || !(ft_strdigits(colors[2])))
 	{
-		ft_twodarr_free(&colors, tokens);
+		ft_twodarr_free((void ***)&colors, tokens);
 		map_error(COLOR_ERR, &map);
 	}
 	map->colors[side] = get_rgb(ft_atoi(colors[0]), ft_atoi(colors[1]), \
 								ft_atoi(colors[2]));
-	ft_twodarr_free(&colors, tokens);
+	ft_twodarr_free((void ***)&colors, tokens);
 	if (map->colors[side] < 0)
 		map_error(COLOR_0255, &map);
 	side == FLOOR ? map->colors[GET_FLOOR]++ : map->colors[GET_CEILING]++;
@@ -165,27 +165,28 @@ static void get_raw_map(t_map *map)
 	free(tmp_line);
 	if (!map->raw_map)
 		map_error(MALLOC_PARSE, &map);
-	ft_ptr_free(&map->line);
+	ft_ptr_free((void **)&map->line);
 }
 
-static void dfs_map(t_map *map, int i, int j)
+static void dfs_map(char **grid, int i, int j, t_map *map)
 {
 	size_t j_len;
 
-	if (i < 0 || i > map->tokens || j < 0)
+	if (i < 0 || i > map->tokens || j < 0 || grid[i][j] == ' ')
 		map_error(MAP_HOLE, &map);
-	j_len = ft_strlen(map->map[i]);
+	j_len = ft_strlen(grid[i]);
 	j_len--;
 	if (j > j_len)
 		map_error(MAP_HOLE, &map);
-	if (map->map[i][j] == '1')
+	if (grid[i][j] == '1' || grid[i][j] == '3')
 		return ;
-	if ((map->map[i][j] == '2') && (!i || i == map->tokens || !j || j == j_len))
+	if ((grid[i][j] == '2') && (!i || i == map->tokens || !j || j == j_len))
 		map_error(MAP_HOLE, &map);
-	dfs_map(map, i - 1, j);
-	dfs_map(map, i, j - 1);
-	dfs_map(map, i + 1, j);
-	dfs_map(map, i, j + 1);
+	grid[i][j] = '3';
+	dfs_map(grid, i - 1, j, map);
+	dfs_map(grid, i, j - 1, map);
+	dfs_map(grid, i + 1, j, map);
+	dfs_map(grid, i, j + 1, map);
 }
 
 static void process_map(t_map *map)
@@ -195,7 +196,7 @@ static void process_map(t_map *map)
 	map->raw_map = ft_strjoin(map->line , "\n");
 	if (!map->raw_map)
 		map_error(MALLOC_PARSE, &map);
-	ft_ptr_free(&map->line);
+	ft_ptr_free((void **)&map->line);
 	map->tokens = 0; // rows
 	while ((map->reading = get_next_line(map->fd, &(map->line))))
 		get_raw_map(map);
@@ -203,8 +204,9 @@ static void process_map(t_map *map)
 	if (!map->player[GET_ALL])
 		map_error(NO_PLAYER, &map);
 	map->map = ft_split(map->raw_map, '\n');
-	ft_ptr_free(&map->raw_map);
-	dfs_map(map, map->player[X], map->player[Y]);
+	ft_ptr_free((void **)&map->raw_map);
+	dfs_map(map->map, map->player[X], map->player[Y], map);
+	map_error("Done", &map);
 	map->map_done++;
 }
 
@@ -218,8 +220,8 @@ static void	process_parsing(t_map *map)
 	map->tokens = ft_twodarr_len((void **)map->split);
 	first = ft_strlen(map->split[0]); // len of first param
 	process_line(map, first);
-	ft_twodarr_free(&map->split, map->tokens);
-	ft_ptr_free(&map->line);
+	ft_twodarr_free((void ***)&map->split, map->tokens);
+	ft_ptr_free((void **)&map->line);
 }
 
 void	parser(const char *map_file)

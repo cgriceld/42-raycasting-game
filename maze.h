@@ -1,9 +1,6 @@
 #ifndef MAZE_H
 # define MAZE_H
 
-# define true 1
-# define false 0
-
 # define DEFAULT_RES_X 5120
 # define DEFAULT_RES_Y 2880
 # define MAP_SET " 012NSEW"
@@ -11,37 +8,37 @@
 /*
 ** Input arguments errors.
 */
-# define ARGS_NUM_COMMENT "Wrong number of arguments, try again: ./maze *.cub [--save]"
-# define MAP_NAME_COMMENT "Check the extension of the map file, it should be .cub, or filename name is missing"
-# define NEG_FD "Error encountered when try to open .cub file, try again"
+# define ARGS_NUM_COMMENT "wrong number of arguments, try again: ./maze *.cub [--save]"
+# define MAP_NAME_COMMENT "check the extension of the map file, it should be .cub, or filename name is missing"
+# define NEG_FD "error encountered when try to open .cub file, try again"
 
 /*
 ** Config parsing errors.
 */
-# define GNL_ERROR "Error encountered while reading .cub file, try again"
-# define UNKNOWN_CH "Syntax error in .cub file: unknown symbols, config missing before map, map not in the end, etc."
-# define RES_ERR "Error with R params in .cub file (negative, zero or unknown symbols), try again"
-# define RES_DOUBLE "Two configurations for R in .cub file, try again"
-# define PATH_DOUBLE "Two configurations for path (NO, WE, SO EA or S) in .cub file, try again"
-# define INVALID_PATH "Invalid path for texture in .cub file, try again"
-# define COLOR_DOUBLE "Two configurations for F or C in .cub file, try again"
-# define COLOR_ERR "Error with color params in F or C (negative, unknown symbols or delimiter isn't ','), try again"
-# define COLOR_0255 "Color params for F or C aren't in [0, 255] range, try again"
+# define GNL_ERROR ".cub : error encountered while reading, try again"
+# define UNKNOWN_CH ".cub : syntax error, unknown symbols, config missing before map, map not in the end, etc."
+# define RES_ERR ".cub : error with R params (negative, zero or unknown symbols), try again"
+# define RES_DOUBLE ".cub : two configurations for R, try again"
+# define PATH_DOUBLE ".cub : two configurations for path (NO, WE, SO EA or S), try again"
+# define INVALID_PATH ".cub : invalid path for texture, try again"
+# define COLOR_DOUBLE ".cub : two configurations for F or C, try again"
+# define COLOR_ERR ".cub : error with color params in F or C (negative, unknown symbols or delimiter isn't ','), try again"
+# define COLOR_0255 ".cub : color params for F or C aren't in [0, 255] range, try again"
 
 /*
 ** Map parsing errors.
 */
-# define NO_MAP "Map missing in .cub file or consists of one line only, try again"
-# define MAP_EMPTY_LINE "It should be no empty lines inside or below the map in .cub, try again"
-# define UNKNOWN_CH_MAP "Map in .cub should consists only from [ 012NSEW] characters, try again"
-# define TWO_PLAYERS ".cub: map contains two players (two [NSEW] symbols), try again"
-# define NO_PLAYER ".cub: no player found in map, try again"
-# define MAP_HOLE ".cub: map isn't surrounded by walls or has spaces inside, try again"
+# define NO_MAP "map .cub : map missing or consists of one line only, try again"
+# define MAP_EMPTY_LINE "map .cub : it should be no empty lines inside or below the map, try again"
+# define UNKNOWN_CH_MAP "map .cub : map should consists only from [ 012NSEW] characters, try again"
+# define TWO_PLAYERS "map .cub : map contains two or more players ([NSEW] symbols), choose one and try again"
+# define NO_PLAYER "map .cub : no player found in map, try again"
+# define MAP_HOLE "map .cub : map isn't surrounded by walls or has spaces inside, try again"
 
 /*
 ** Malloc errors.
 */
-# define MALLOC_PARSE "Memory error encountered while parsing, try again"
+# define MALLOC_PARSE "memory : malloc error encountered while parsing, try again"
 
 #include "libft/libft.h"
 #include <stdlib.h>
@@ -83,7 +80,7 @@ typedef struct	s_map
 	int		res_x;
 	int		res_y;
 	char	**paths;
-	int		colors[3];
+	int		colors[4];
 	int		reading;
 	char	*raw_map;
 	char	**map;
@@ -106,7 +103,7 @@ typedef struct	s_mlx_manager
 
 // to libft
 size_t		ft_twodarr_len(void **arr);
-void		ft_twodarr_free(char ***arr, int len);
+void		ft_twodarr_free(void ***arr, int len);
 size_t	ft_strlen(const char *s);
 int	ft_strendcmp(const char *s1, const char *s2, int n);
 char	*ft_strdup(const char *s1);
@@ -120,7 +117,7 @@ int	ft_isdigit(int c);
 int			ft_atoi(const char *str);
 int		ft_strinset(char *s, char *set);
 char	*ft_strchr(const char *s, int c);
-void	ft_ptr_free(char **ptr);
+void	ft_ptr_free(void **ptr);
 char		*ft_strchrset(char *s, char *set);
 
 void	init_map(t_map **map, const char *map_file);

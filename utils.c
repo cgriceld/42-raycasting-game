@@ -1,7 +1,7 @@
 #include "maze.h"
 
 //to libft
-void	ft_ptr_free(char **ptr)
+void	ft_ptr_free(void **ptr)
 {
 	free(*ptr);
 	*ptr = NULL;
@@ -40,9 +40,9 @@ size_t		ft_twodarr_len(void **arr)
 }
 
 //to libft
-void		ft_twodarr_free(char ***arr, int len)
+void		ft_twodarr_free(void ***arr, int len)
 {
-	char **tmp;
+	void **tmp;
 
 	tmp = *arr;
 	while (len--)
