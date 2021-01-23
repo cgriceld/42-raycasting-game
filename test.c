@@ -1,21 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
 
-void get(char *map)
-{
-	map = NULL;
-}
+// for walls
 
 int main(void)
 {
-	int size = 2;
-
-	char **map = (char **)malloc(sizeof(char *) * size);
-	map[0] = (char *)malloc(1);
-	map[1] = (char *)malloc(1);
-	get(map[0]);
-	if (!map[0])
-		printf("%s\n", "null");
+		printf("%d\n", (int)roundf(2.8));
 
 	return (0);
 }

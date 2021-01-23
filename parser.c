@@ -3,16 +3,14 @@
 
 static void parse_resolution(t_map *map)
 {
-	if (map->res_x)
+	if (map->res[X])
 		map_error(RES_DOUBLE, &map);
 	if (!(ft_strdigits(map->split[1])) || !(ft_strdigits(map->split[2])))
 		map_error(RES_ERR, &map);
-	map->res_x = ft_atoi(map->split[1]);
-	map->res_y = ft_atoi(map->split[2]);
-	if (!map->res_x || !map->res_y)
+	map->res[X] = ft_atoi(map->split[1]);
+	map->res[Y] = ft_atoi(map->split[2]);
+	if (!map->res[X] || !map->res[Y])
 		map_error(RES_ERR, &map);
-	map->res_x = map->res_x > DEFAULT_RES_X ? DEFAULT_RES_X : map->res_x;
-	map->res_y = map->res_y > DEFAULT_RES_Y ? DEFAULT_RES_Y : map->res_y;
 }
 
 static void parse_ttr(t_map *map, int side)
@@ -95,7 +93,7 @@ static void process_line(t_map *map, size_t first)
 
 static int map_ready(t_map *map)
 {
-	return (map->res_x && map->res_y && map->paths[NO] && map->paths[EA] && \
+	return (map->res[X] && map->paths[NO] && map->paths[EA] && \
 			map->paths[SO] && map->paths[WE] && map->paths[SPRITE] && \
 			map->colors[GET_FLOOR] && map->colors[GET_CEILING]);
 }
@@ -108,27 +106,35 @@ static void find_player(t_map *map)
 	{
 		if (map->player[GET_ALL])
 			map_error(TWO_PLAYERS, &map);
-		map->player[X] = map->tokens;
-		map->player[Y] = player - map->line;
+		map->player[X] = map->tokens + 0.5;
+		map->player[Y] = player - map->line + 0.5;
 		if (*player == 'N')
 		{
-			map->initdir[X] = 0;
-			map->initdir[Y] = 1;
+			map->dir[X] = 0;
+			map->dir[Y] = -1;
+			map->plane[X] = 0.66;
+			map->plane[Y] = 0;
 		}
 		else if (*player == 'E')
 		{
-			map->initdir[X] = 1;
-			map->initdir[Y] = 0;
+			map->dir[X] = 1;
+			map->dir[Y] = 0;
+			map->plane[X] = 0;
+			map->plane[Y] = 0.66;
 		}
 		else if (*player == 'S')
 		{
-			map->initdir[X] = 0;
-			map->initdir[Y] = -1;
+			map->dir[X] = 0;
+			map->dir[Y] = 1;
+			map->plane[X] = -0.66;
+			map->plane[Y] = 0;
 		}
 		else
 		{
-			map->initdir[X] = -1;
-			map->initdir[Y] = 0;
+			map->dir[X] = -1;
+			map->dir[Y] = 0;
+			map->plane[X] = 0;
+			map->plane[Y] = -0.66;
 		}
 		map->player[GET_ALL]++;
 	}
@@ -142,12 +148,12 @@ static void find_sprite(t_map *map)
 	// }
 }
 
-static void get_raw_map(t_map *map)
+static void get_raw_map(t_map *map, int reading)
 {
 	char *tmp_line;
 	char *tmp_map;
 
-	if (map->reading < 0)
+	if (reading < 0)
 		map_error(GNL_ERROR, &map);
 	if (!*map->line)
 		map_error(MAP_EMPTY_LINE, &map);
@@ -180,8 +186,8 @@ static void dfs_map(char **grid, int i, int j, t_map *map)
 		map_error(MAP_HOLE, &map);
 	if (grid[i][j] == '1' || grid[i][j] == '3')
 		return ;
-	if ((grid[i][j] == '2') && (!i || i == map->tokens || !j || j == j_len))
-		map_error(MAP_HOLE, &map);
+	//if ((grid[i][j] == '2') && (!i || i == map->tokens || !j || j == j_len))
+		//map_error(MAP_HOLE, &map);
 	grid[i][j] = '3';
 	dfs_map(grid, i - 1, j, map);
 	dfs_map(grid, i, j - 1, map);
@@ -191,6 +197,8 @@ static void dfs_map(char **grid, int i, int j, t_map *map)
 
 static void process_map(t_map *map)
 {
+	int reading;
+
 	if (!ft_strinset(map->line, MAP_SET))
 		map_error(UNKNOWN_CH_MAP, &map);
 	map->raw_map = ft_strjoin(map->line , "\n");
@@ -198,15 +206,15 @@ static void process_map(t_map *map)
 		map_error(MALLOC_PARSE, &map);
 	ft_ptr_free((void **)&map->line);
 	map->tokens = 0; // rows
-	while ((map->reading = get_next_line(map->fd, &(map->line))))
-		get_raw_map(map);
-	get_raw_map(map);
+	while ((reading = get_next_line(map->fd, &(map->line))))
+		get_raw_map(map, reading);
+	get_raw_map(map, reading);
 	if (!map->player[GET_ALL])
 		map_error(NO_PLAYER, &map);
 	map->map = ft_split(map->raw_map, '\n');
 	ft_ptr_free((void **)&map->raw_map);
 	dfs_map(map->map, map->player[X], map->player[Y], map);
-	map_error("Done", &map);
+	//map_error("Done", &map);
 	map->map_done++;
 }
 
@@ -227,16 +235,18 @@ static void	process_parsing(t_map *map)
 void	parser(const char *map_file)
 {
 	t_map	*map;
+	int		reading;
 
 	init_map(&map, map_file);
-	while ((map->reading = get_next_line(map->fd, &(map->line))))
+	while ((reading = get_next_line(map->fd, &(map->line))))
 	{
-		if (map->reading < 0)
+		if (reading < 0)
 			map_error(GNL_ERROR, &map);
 		if (!(*map->line)) // empty line
 			continue ;
 		map_ready(map) ? process_map(map) : process_parsing(map);
 	}
-	if (!map->reading && !map->map_done)
+	if (!reading && !map->map_done)
 		map_error(NO_MAP, &map);
 }
+

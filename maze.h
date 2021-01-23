@@ -1,8 +1,6 @@
 #ifndef MAZE_H
 # define MAZE_H
 
-# define DEFAULT_RES_X 5120
-# define DEFAULT_RES_Y 2880
 # define MAP_SET " 012NSEW"
 # define PLAYER_SET "NSEW"
 /*
@@ -39,6 +37,7 @@
 ** Malloc errors.
 */
 # define MALLOC_PARSE "memory : malloc error encountered while parsing, try again"
+# define MALLOC_GAME "memory : malloc error when starting game, try again"
 
 #include "libft/libft.h"
 #include <stdlib.h>
@@ -76,17 +75,17 @@ typedef struct	s_map
 	int		fd;
 	char	*line;
 	char	**split;
+	char	*raw_map;
 	size_t	tokens;
-	int		res_x;
-	int		res_y;
+	int		map_done;
+	int		res[2];
 	char	**paths;
 	int		colors[4];
-	int		reading;
-	char	*raw_map;
 	char	**map;
-	int		player[3];
-	int		initdir[2];
-	int		map_done;
+	double	player[3];
+	double	dir[2];
+	double	plane[2];
+	double	ray; // cameraX
 }				t_map;
 
 /*
@@ -126,5 +125,6 @@ void	parser(const char *map_file);
 
 void lite_error(char *comment);
 void map_error(char *comment, t_map **map);
+
 
 #endif

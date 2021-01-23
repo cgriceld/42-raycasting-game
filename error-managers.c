@@ -14,7 +14,7 @@ void lite_error(char *comment)
 // 	free((*map)->split);
 // }
 
-void map_error(char *comment, t_map **map)
+static void free_map(t_map **map)
 {
 	if ((*map)->line)
 		free((*map)->line);
@@ -29,5 +29,10 @@ void map_error(char *comment, t_map **map)
 	if ((*map)->fd != -1)
 		close((*map)->fd);
 	free(*map);
+}
+
+void map_error(char *comment, t_map **map)
+{
+	free_map(map);
 	lite_error(comment);
 }
