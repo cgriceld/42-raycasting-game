@@ -26,3 +26,26 @@ void	init_map(t_map **map, const char *map_file)
 	(*map)->res[X] = 0;
 	(*map)->map_done = 0;
 }
+
+void	init_game(t_game **game, t_map *map)
+{
+	*game = (t_game *)malloc(sizeof(t_game));
+	if (!*game)
+		map_error(MALLOC_GAME, &map);
+	(*game)->paths = map->paths;
+	map->paths = NULL;
+	(*game)->map = map->map;
+	map->map = NULL;
+	(*game)->rows = map->tokens;
+	(*game)->res[X] = map->res[X];
+	(*game)->res[Y] = map->res[Y];
+	(*game)->colors[FLOOR] = map->colors[FLOOR];
+	(*game)->colors[CEILING] = map->colors[CEILING];
+	(*game)->player[X] = map->player[X];
+	(*game)->player[Y] = map->player[Y];
+	(*game)->dir[X] = map->dir[X];
+	(*game)->dir[Y] = map->dir[Y];
+	(*game)->plane[X] = map->plane[X];
+	(*game)->plane[Y] = map->plane[Y];
+	free_map(&map);
+}

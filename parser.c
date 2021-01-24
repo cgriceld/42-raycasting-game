@@ -214,7 +214,7 @@ static void process_map(t_map *map)
 	map->map = ft_split(map->raw_map, '\n');
 	ft_ptr_free((void **)&map->raw_map);
 	dfs_map(map->map, map->player[X], map->player[Y], map);
-	//map_error("Done", &map);
+	map_error("Done", &map);
 	map->map_done++;
 }
 
@@ -232,9 +232,10 @@ static void	process_parsing(t_map *map)
 	ft_ptr_free((void **)&map->line);
 }
 
-void	parser(const char *map_file)
+t_game	*parser(const char *map_file)
 {
 	t_map	*map;
+	t_game	*game;
 	int		reading;
 
 	init_map(&map, map_file);
@@ -248,5 +249,7 @@ void	parser(const char *map_file)
 	}
 	if (!reading && !map->map_done)
 		map_error(NO_MAP, &map);
+	init_game(&game, map);
+	return (game);
 }
 

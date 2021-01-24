@@ -14,7 +14,7 @@ void lite_error(char *comment)
 // 	free((*map)->split);
 // }
 
-static void free_map(t_map **map)
+void free_map(t_map **map)
 {
 	if ((*map)->line)
 		free((*map)->line);
@@ -29,10 +29,25 @@ static void free_map(t_map **map)
 	if ((*map)->fd != -1)
 		close((*map)->fd);
 	free(*map);
+	*map = NULL;
 }
 
 void map_error(char *comment, t_map **map)
 {
 	free_map(map);
+	lite_error(comment);
+}
+
+void free_game(t_game **game)
+{
+	ft_twodarr_free((void ***)&(*game)->map, ++(*game)->rows);
+	ft_twodarr_free((void ***)&(*game)->paths, 5);
+	free(*game);
+	*game = NULL;
+}
+
+void game_error(char *comment, t_game **game)
+{
+	free_game(game);
 	lite_error(comment);
 }

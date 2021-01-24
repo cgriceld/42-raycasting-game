@@ -1,11 +1,22 @@
-#include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 
-// for walls
+struct game
+{
+	char *s;
+};
 
 int main(void)
 {
-		printf("%d\n", (int)roundf(2.8));
+	struct game *g;
+	char *test;
+
+	g = (struct game *)malloc(sizeof(struct game));
+	g->s = (char *)malloc(1);
+	*(g->s) = 's';
+	test = g->s;
+	g->s = NULL;
+	free(g);
+	free(test);
 
 	return (0);
 }
