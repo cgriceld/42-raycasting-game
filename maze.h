@@ -6,31 +6,15 @@
 # define PLAYER_SET "NSEW"
 
 /*
-** escape keycode.
+** Keycodes.
 */
 # define ESC 0x35
-/*
-** "left" keycodes.
-*/
 # define ARRLEFT 0x7B
-# define A 0x00
-# define Q 0x0C
-/*
-** "right" keycodes.
-*/
 # define ARRRIGHT 0x7C
-# define D 0x02
-/*
-** "up" keycodes.
-*/
-# define ARRUP 0x7E
 # define W 0x0D
-# define Z 0x06
-/*
-** "down" keycodes.
-*/
-# define ARRDOWN 0x7D
+# define A 0x00
 # define S 0x01
+# define D 0x02
 
 /*
 ** Input arguments errors.
@@ -151,7 +135,7 @@ typedef struct	s_game
 	int		colors[2];
 	char	**map;
 	size_t	rows;
-	unsigned char event;
+	int		event; // keycode
 	double	player[2];
 	double	dir[2];
 	double	plane[2];

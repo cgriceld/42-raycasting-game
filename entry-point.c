@@ -50,15 +50,34 @@ static void prepare_mlx(t_game *game)
 	get_mlximg(game, SPRITE);
 
 }
+# define ESC 0x35
+# define ARRLEFT 0x7B
+# define ARRRIGHT 0x7C
+# define W 0x0D
+# define A 0x00
+# define S 0x01
+# define D 0x02
 
 static void press(int keycode, t_game *game)
+{
+	if (keycode == ESC || keycode == ARRLEFT || keycode == ARRRIGHT || \
+		keycode == W || keycode == A || keycode == S || \
+		keycode == D)
+	game->event = keycode;
+}
+
+static void maze(t_game *game)
 {
 
 }
 
 static void play(t_game *game)
 {
-	mlx_hook(game->win, 2, 1L<<0, &press, game);
+	mlx_hook(game->win, 2, 0, &press, game); // перехват события
+	//mlx_hook(game->win, 3, 1L<<1, &released, game);
+	mlx_hook(game->win, 17, 0, &free_game, game);
+	mlx_loop_hook(game->mlx, &maze, game);
+	mlx_loop(game->mlx);
 }
 
 int			main(int argc, char **argv)
