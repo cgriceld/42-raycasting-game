@@ -214,7 +214,7 @@ static void process_map(t_map *map)
 	map->map = ft_split(map->raw_map, '\n');
 	ft_ptr_free((void **)&map->raw_map);
 	dfs_map(map->map, map->player[X], map->player[Y], map);
-	map_error("Done", &map);
+	//map_error("Done", &map);
 	map->map_done++;
 }
 

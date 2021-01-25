@@ -6,6 +6,33 @@
 # define PLAYER_SET "NSEW"
 
 /*
+** escape keycode.
+*/
+# define ESC 0x35
+/*
+** "left" keycodes.
+*/
+# define ARRLEFT 0x7B
+# define A 0x00
+# define Q 0x0C
+/*
+** "right" keycodes.
+*/
+# define ARRRIGHT 0x7C
+# define D 0x02
+/*
+** "up" keycodes.
+*/
+# define ARRUP 0x7E
+# define W 0x0D
+# define Z 0x06
+/*
+** "down" keycodes.
+*/
+# define ARRDOWN 0x7D
+# define S 0x01
+
+/*
 ** Input arguments errors.
 */
 # define ARGS_NUM_COMMENT "wrong number of arguments, try again: ./maze *.cub [--save]"
@@ -40,12 +67,14 @@
 */
 # define MALLOC_PARSE "memory : malloc error encountered while parsing, try again"
 # define MALLOC_GAME "memory : malloc error when starting game, try again"
+# define MLX_MALLOC "mlx : malloc error while rendering, try again"
 
 /*
 ** MLX errors.
 */
 # define MLX_INIT "mlx : mlx_init() returns NULL, try again"
 # define MLX_NEWWIN "mlx : mlx_new_window() returns NULL, try again"
+# define MLX_XPM "mlx : mlx_xpm_file_to_image() returns NULL, try again"
 
 #include "libft/libft.h"
 #include <stdlib.h>
@@ -76,6 +105,20 @@ typedef enum e_person
 }			t_person;
 
 /*
+** Struct for mlx image.
+*/
+typedef struct	s_mlximg
+{
+	void			*img;
+	unsigned int	*data;
+	int				bits_in_texel;
+	int				bytes_line;
+	int				little_endian;
+	int				xpm_width;
+	int				xpm_height;
+}				t_mlximg;
+
+/*
 ** Struct for parsing.
 */
 typedef struct	s_map
@@ -102,28 +145,18 @@ typedef struct	s_game
 {
 	void	*mlx;
 	void	*win;
+	t_mlximg	**ttrs;
 	int		res[2];
 	char	**paths;
 	int		colors[2];
 	char	**map;
 	size_t	rows;
+	unsigned char event;
 	double	player[2];
 	double	dir[2];
 	double	plane[2];
 	double	ray; // cameraX
 }				t_game;
-
-/*
-** Struct for mlx image.
-*/
-typedef struct	s_mlximg
-{
-	void	*img;
-	void	*window;
-	void	*image;
-	int		img_h;
-	int		img_w;
-}				t_mlximg;
 
 // libft
 size_t		ft_twodarr_len(void **arr);

@@ -36,6 +36,15 @@ void	init_game(t_game **game, t_map *map)
 	map->paths = NULL;
 	(*game)->map = map->map;
 	map->map = NULL;
+	(*game)->win = NULL;
+	(*game)->ttrs = (t_mlximg **)malloc(sizeof(t_mlximg *) * 5);
+	if (!(*game)->ttrs)
+		game_error(MLX_MALLOC, game);
+	(*game)->ttrs[NO] = NULL;
+	(*game)->ttrs[EA] = NULL;
+	(*game)->ttrs[SO] = NULL;
+	(*game)->ttrs[WE] = NULL;
+	(*game)->ttrs[SPRITE] = NULL;
 	(*game)->rows = map->tokens;
 	(*game)->res[X] = map->res[X];
 	(*game)->res[Y] = map->res[Y];

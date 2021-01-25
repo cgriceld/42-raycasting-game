@@ -21,9 +21,17 @@ static void correct_resolution(t_game *game)
 		game->res[Y] = sizey;
 }
 
-static void get_mlximg(t_game *game)
+static void get_mlximg(t_game *game, int flag)
 {
-	
+	game->ttrs[flag] = (t_mlximg *)malloc(sizeof(t_mlximg));
+	if (!game->ttrs[flag])
+		game_error(MLX_MALLOC, &game);
+	game->ttrs[flag]->img = mlx_xpm_file_to_image(game->mlx, game->paths[flag], &game->ttrs[flag]->xpm_width, \
+							&game->ttrs[flag]->xpm_height);
+	if (!game->ttrs[flag]->img)
+		game_error(MLX_XPM, &game);
+	game->ttrs[flag]->data = (unsigned int *)mlx_get_data_addr(game->ttrs[flag]->img, &game->ttrs[flag]->bits_in_texel, \
+											&game->ttrs[flag]->bytes_line, &game->ttrs[flag]->little_endian);
 }
 
 static void prepare_mlx(t_game *game)
@@ -35,6 +43,22 @@ static void prepare_mlx(t_game *game)
 	game->win = mlx_new_window(game->mlx, game->res[X], game->res[Y], TITLE);
 	if (!game->win)
 		game_error(MLX_NEWWIN, &game);
+	get_mlximg(game, NO);
+	get_mlximg(game, EA);
+	get_mlximg(game, SO);
+	get_mlximg(game, WE);
+	get_mlximg(game, SPRITE);
+
+}
+
+static void press(int keycode, t_game *game)
+{
+
+}
+
+static void play(t_game *game)
+{
+	mlx_hook(game->win, 2, 1L<<0, &press, game);
 }
 
 int			main(int argc, char **argv)
@@ -46,6 +70,7 @@ int			main(int argc, char **argv)
 	correct_args(argc, argv, ft_strlen(argv[1]));
 	game = parser(argv[1]);
 	prepare_mlx(game);
+	play(game);
 	
 	return (0);
 }

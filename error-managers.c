@@ -38,10 +38,29 @@ void map_error(char *comment, t_map **map)
 	lite_error(comment);
 }
 
+static void free_mlximg(t_game **game, int len)
+{
+	while (len--)
+	{
+		if ((*game)->ttrs[len])
+		{
+			if ((*game)->ttrs[len]->img)
+				mlx_destroy_image((*game)->mlx, (*game)->ttrs[len]->img);
+			free((*game)->ttrs[len]);
+		}
+	}
+	free((*game)->ttrs);
+	(*game)->ttrs = NULL;
+}
+
 void free_game(t_game **game)
 {
 	ft_twodarr_free((void ***)&(*game)->map, ++(*game)->rows);
 	ft_twodarr_free((void ***)&(*game)->paths, 5);
+	if ((*game)->ttrs)
+		free_mlximg(game, 5);
+	if ((*game)->win)
+		mlx_destroy_window((*game)->mlx, (*game)->win);
 	free(*game);
 	*game = NULL;
 }
