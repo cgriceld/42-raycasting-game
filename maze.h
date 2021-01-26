@@ -1,13 +1,21 @@
 #ifndef MAZE_H
 # define MAZE_H
 
+#include "libft/libft.h"
+#include "mlx/mlx.h"
+#include <stdlib.h>
+#include <fcntl.h>
+#include <math.h>
+
 # define TITLE "maze"
 # define MAP_SET " 012NSEW"
 # define PLAYER_SET "NSEW"
+# define SPEED 0.06
 
 /*
 ** Keycodes.
 */
+# define NO_KEY 0x15
 # define ESC 0x35
 # define ARRLEFT 0x7B
 # define ARRRIGHT 0x7C
@@ -59,10 +67,7 @@
 # define MLX_INIT "mlx : mlx_init() returns NULL, try again"
 # define MLX_NEWWIN "mlx : mlx_new_window() returns NULL, try again"
 # define MLX_XPM "mlx : mlx_xpm_file_to_image() returns NULL, try again"
-
-#include "libft/libft.h"
-#include <stdlib.h>
-#include <fcntl.h>
+# define MLX_NEWIMG "mlx : mlx_new_image() returns NULL, try again"
 
 typedef enum e_texture
 {
@@ -94,7 +99,7 @@ typedef enum e_person
 typedef struct	s_mlximg
 {
 	void			*img;
-	unsigned int	*data;
+	char			*data;
 	int				bits_in_texel;
 	int				bytes_line;
 	int				little_endian;
@@ -130,6 +135,7 @@ typedef struct	s_game
 	void	*mlx;
 	void	*win;
 	t_mlximg	**ttrs;
+	t_mlximg *maze;
 	int		res[2];
 	char	**paths;
 	int		colors[2];
@@ -139,7 +145,14 @@ typedef struct	s_game
 	double	player[2];
 	double	dir[2];
 	double	plane[2];
-	double	ray; // cameraX
+	double	cameraX;
+	double	raydir[2];
+	int		square[2];
+	double	sidedist[2];
+	double	deltadist[2];
+	double	perpwalldist;
+	int		step[2];
+	int		side;
 }				t_game;
 
 // libft
@@ -165,6 +178,8 @@ void	init_game(t_game **game, t_map *map);
 void	init_map(t_map **map, const char *map_file);
 t_game	*parser(const char *map_file);
 void free_map(t_map **map);
+void maze(t_game *game);
+void game_over(t_game **game);
 
 void lite_error(char *comment);
 void map_error(char *comment, t_map **map);

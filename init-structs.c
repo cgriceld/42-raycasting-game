@@ -37,9 +37,13 @@ void	init_game(t_game **game, t_map *map)
 	(*game)->map = map->map;
 	map->map = NULL;
 	(*game)->win = NULL;
+	(*game)->maze = NULL;
 	(*game)->ttrs = (t_mlximg **)malloc(sizeof(t_mlximg *) * 5);
 	if (!(*game)->ttrs)
+	{
+		free_map(&map);
 		game_error(MLX_MALLOC, game);
+	}
 	(*game)->ttrs[NO] = NULL;
 	(*game)->ttrs[EA] = NULL;
 	(*game)->ttrs[SO] = NULL;
@@ -56,5 +60,6 @@ void	init_game(t_game **game, t_map *map)
 	(*game)->dir[Y] = map->dir[Y];
 	(*game)->plane[X] = map->plane[X];
 	(*game)->plane[Y] = map->plane[Y];
+	(*game)->event = NO_KEY;
 	free_map(&map);
 }

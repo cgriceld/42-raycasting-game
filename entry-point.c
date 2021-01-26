@@ -21,7 +21,7 @@ static void correct_resolution(t_game *game)
 		game->res[Y] = sizey;
 }
 
-static void get_mlximg(t_game *game, int flag)
+static void get_ttrimg(t_game *game, int flag)
 {
 	game->ttrs[flag] = (t_mlximg *)malloc(sizeof(t_mlximg));
 	if (!game->ttrs[flag])
@@ -30,7 +30,7 @@ static void get_mlximg(t_game *game, int flag)
 							&game->ttrs[flag]->xpm_height);
 	if (!game->ttrs[flag]->img)
 		game_error(MLX_XPM, &game);
-	game->ttrs[flag]->data = (unsigned int *)mlx_get_data_addr(game->ttrs[flag]->img, &game->ttrs[flag]->bits_in_texel, \
+	game->ttrs[flag]->data = mlx_get_data_addr(game->ttrs[flag]->img, &game->ttrs[flag]->bits_in_texel, \
 											&game->ttrs[flag]->bytes_line, &game->ttrs[flag]->little_endian);
 }
 
@@ -43,39 +43,28 @@ static void prepare_mlx(t_game *game)
 	game->win = mlx_new_window(game->mlx, game->res[X], game->res[Y], TITLE);
 	if (!game->win)
 		game_error(MLX_NEWWIN, &game);
-	get_mlximg(game, NO);
-	get_mlximg(game, EA);
-	get_mlximg(game, SO);
-	get_mlximg(game, WE);
-	get_mlximg(game, SPRITE);
-
+	get_ttrimg(game, NO);
+	get_ttrimg(game, EA);
+	get_ttrimg(game, SO);
+	get_ttrimg(game, WE);
+	get_ttrimg(game, SPRITE);
 }
-# define ESC 0x35
-# define ARRLEFT 0x7B
-# define ARRRIGHT 0x7C
-# define W 0x0D
-# define A 0x00
-# define S 0x01
-# define D 0x02
 
-static void press(int keycode, t_game *game)
+static void event(int keycode, t_game *game)
 {
-	if (keycode == ESC || keycode == ARRLEFT || keycode == ARRRIGHT || \
+	if (keycode == ESC)
+		game_over(&game);
+	else if (keycode == ARRLEFT || keycode == ARRRIGHT || \
 		keycode == W || keycode == A || keycode == S || \
 		keycode == D)
-	game->event = keycode;
-}
-
-static void maze(t_game *game)
-{
-
+		game->event = keycode;
 }
 
 static void play(t_game *game)
 {
-	mlx_hook(game->win, 2, 0, &press, game); // перехват события
+	mlx_hook(game->win, 2, 0, &event, game); // перехват события
 	//mlx_hook(game->win, 3, 1L<<1, &released, game);
-	mlx_hook(game->win, 17, 0, &free_game, game);
+	mlx_hook(game->win, 17, 0, &game_over, &game); // мышкой нажали на красный крестик
 	mlx_loop_hook(game->mlx, &maze, game);
 	mlx_loop(game->mlx);
 }

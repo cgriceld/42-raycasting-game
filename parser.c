@@ -98,6 +98,15 @@ static int map_ready(t_map *map)
 			map->colors[GET_FLOOR] && map->colors[GET_CEILING]);
 }
 
+/*
+**  ——————————> X
+** |     ^ N
+** | W   |
+** | <---|---> E
+** |     |
+** |     ^ S
+** ^ Y
+*/
 static void find_player(t_map *map)
 {
 	char *player;

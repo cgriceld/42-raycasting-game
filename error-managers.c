@@ -59,6 +59,12 @@ void free_game(t_game **game)
 	ft_twodarr_free((void ***)&(*game)->paths, 5);
 	if ((*game)->ttrs)
 		free_mlximg(game, 5);
+	if ((*game)->maze)
+	{
+		if ((*game)->maze->img)
+			mlx_destroy_image((*game)->mlx, (*game)->maze->img);
+		free((*game)->maze);
+	}
 	if ((*game)->win)
 		mlx_destroy_window((*game)->mlx, (*game)->win);
 	free(*game);
@@ -69,4 +75,11 @@ void game_error(char *comment, t_game **game)
 {
 	free_game(game);
 	lite_error(comment);
+}
+
+void game_over(t_game **game)
+{
+	free_game(game);
+	ft_putendl_fd("GAME OVER", 1);
+	exit(EXIT_SUCCESS);
 }
