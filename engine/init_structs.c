@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_structs.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 11:27:43 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 19:05:51 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
 void		init_map(t_map **map, const char *map_file)
@@ -58,8 +70,8 @@ static void	get_sprites(t_game **game)
 
 static void	malloc_game(t_game **game, t_map *map)
 {
-	(*game)->zbuffer = (double *)malloc(sizeof(double) * map->res[X]);
-	if (!(*game)->zbuffer)
+	(*game)->depth = (double *)malloc(sizeof(double) * map->res[X]);
+	if (!(*game)->depth)
 	{
 		free_map(&map);
 		game_error(MLX_MALLOC, game);
@@ -91,8 +103,8 @@ static void	copy_map(t_game **game, t_map *map)
 	(*game)->res[Y] = map->res[Y];
 	(*game)->colors[FLOOR] = map->colors[FLOOR];
 	(*game)->colors[CEILING] = map->colors[CEILING];
-	(*game)->pos[X] = map->player[Y];
-	(*game)->pos[Y] = map->player[X];
+	(*game)->player[X] = map->player[Y];
+	(*game)->player[Y] = map->player[X];
 	(*game)->dir[X] = map->dir[X];
 	(*game)->dir[Y] = map->dir[Y];
 	(*game)->plane[X] = map->plane[X];
@@ -104,7 +116,7 @@ void		init_game(t_game **game, t_map *map)
 {
 	*game = (t_game *)malloc(sizeof(t_game));
 	if (!*game)
-		map_error(MALLOC_GAME, &map);
+		map_error(MLX_MALLOC, &map);
 	(*game)->paths = map->paths;
 	map->paths = NULL;
 	(*game)->map = map->map;
@@ -112,7 +124,7 @@ void		init_game(t_game **game, t_map *map)
 	(*game)->win = NULL;
 	(*game)->maze = NULL;
 	(*game)->sprites = NULL;
-	(*game)->zbuffer = NULL;
+	(*game)->depth = NULL;
 	(*game)->spr = NULL;
 	(*game)->numspr = map->sprites;
 	(*game)->rows = map->tokens;

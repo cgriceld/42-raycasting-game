@@ -1,4 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   play.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 12:05:42 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 14:26:50 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
+
+int			unclick(int key, t_game *game)
+{
+	if (key == 0x0D || !key || key == 0x01 || key == 0x02 \
+		|| key == 0x7B || key == 0x7C)
+		game->event &= EMPTY;
+	return (TRUE);
+}
 
 int			klick(int key, t_game *game)
 {
@@ -16,14 +36,6 @@ int			klick(int key, t_game *game)
 		game->event |= LEFT;
 	else if (key == 0x7C)
 		game->event |= RIGHT;
-	return (TRUE);
-}
-
-int			unclick(int key, t_game *game)
-{
-	if (key == 0x0D || !key || key == 0x01 || key == 0x02 \
-		|| key == 0x7B || key == 0x7C)
-		game->event &= EMPTY;
 	return (TRUE);
 }
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   entry_point.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 11:21:27 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 16:30:13 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
 static void	correct_args(int argc, char **argv, size_t filemap_len, \
@@ -6,9 +18,10 @@ static void	correct_args(int argc, char **argv, size_t filemap_len, \
 	if (filemap_len < 5 || ft_strendcmp(argv[1], ".cub", filemap_len - 4))
 		lite_error(MAP_NAME_COMMENT);
 	if (argc == 3)
-		!ft_strncmp(argv[2], "--save", 6) ? (*save |= SAVE) : lite_error(SAVE_ERR);
+		!ft_strncmp(argv[2], "--save", 6) ? (*save |= SAVE) : \
+											lite_error(SAVE_ERR);
 	if (*save & SAVE)
-		write(1, "SAVING...\n", 10);
+		ft_putendl_fd("SAVING...", 1);
 }
 
 static void	get_ttrs(t_game *game, int flag)
@@ -75,4 +88,3 @@ int			main(int argc, char **argv)
 	mlx_loop(game->mlx);
 	return (TRUE);
 }
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   steps.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 18:58:12 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 18:58:18 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
 /*
@@ -6,21 +18,21 @@
 
 static void	check_move(t_game *game, int flag, double new)
 {
-	if (flag == X && game->map[(int)(game->pos[Y])][(int)(new)] != '1' && \
-		game->map[(int)(game->pos[Y])][(int)(new)] != '4')
-		game->pos[X] = new;
-	if (flag == Y && game->map[(int)(new)][(int)(game->pos[X])] != '1' && \
-		game->map[(int)(new)][(int)(game->pos[X])] != '4')
-		game->pos[Y] = new;
+	if (flag == X && game->map[(int)(game->player[Y])][(int)(new)] != '1' && \
+		game->map[(int)(game->player[Y])][(int)(new)] != '4')
+		game->player[X] = new;
+	if (flag == Y && game->map[(int)(new)][(int)(game->player[X])] != '1' && \
+		game->map[(int)(new)][(int)(game->player[X])] != '4')
+		game->player[Y] = new;
 }
 
 void		step_up(t_game *game)
 {
 	double move;
 
-	move = game->pos[X] + 0.03 * game->dir[X];
+	move = game->player[X] + 0.03 * game->dir[X];
 	check_move(game, X, move);
-	move = game->pos[Y] + 0.03 * game->dir[Y];
+	move = game->player[Y] + 0.03 * game->dir[Y];
 	check_move(game, Y, move);
 }
 
@@ -28,9 +40,9 @@ void		step_left(t_game *game)
 {
 	double move;
 
-	move = game->pos[X] - 0.03 * game->plane[X];
+	move = game->player[X] - 0.03 * game->plane[X];
 	check_move(game, X, move);
-	move = game->pos[Y] - 0.03 * game->plane[Y];
+	move = game->player[Y] - 0.03 * game->plane[Y];
 	check_move(game, Y, move);
 }
 
@@ -38,9 +50,9 @@ void		step_down(t_game *game)
 {
 	double move;
 
-	move = game->pos[X] - 0.03 * game->dir[X];
+	move = game->player[X] - 0.03 * game->dir[X];
 	check_move(game, X, move);
-	move = game->pos[Y] - 0.03 * game->dir[Y];
+	move = game->player[Y] - 0.03 * game->dir[Y];
 	check_move(game, Y, move);
 }
 
@@ -48,8 +60,8 @@ void		step_right(t_game *game)
 {
 	double move;
 
-	move = game->pos[X] + 0.03 * game->plane[X];
+	move = game->player[X] + 0.03 * game->plane[X];
 	check_move(game, X, move);
-	move = game->pos[Y] + 0.03 * game->plane[Y];
+	move = game->player[Y] + 0.03 * game->plane[Y];
 	check_move(game, Y, move);
 }

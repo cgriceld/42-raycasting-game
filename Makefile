@@ -2,14 +2,16 @@ NAME = cub3D
 HEADER = engine/maze.h
 
 CC = gcc
-CFLAGS = -g
-#-Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
-SRC =	engine/entry-point.c engine/sort_sprites.c \
-		engine/error-managers.c engine/init-structs.c \
-		engine/parser-config.c engine/parser-map.c engine/parser.c \
+SRC =	engine/entry_point.c engine/sort_sprites.c \
+		engine/error_game.c engine/error_map.c engine/init_structs.c \
+		engine/parser_config.c engine/parser_map.c engine/parser.c \
 		engine/rays.c engine/steps.c engine/turns.c engine/play.c \
-		engine/utils.c engine/save.c engine/sprites.c
+		engine/save.c engine/sprites.c \
+		engine/utils/ft_split.c engine/utils/gnl_utils.c \
+		engine/utils/gnl.c engine/utils/memory.c engine/utils/puts.c \
+		engine/utils/search.c engine/utils/strings.c engine/utils/types.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -33,11 +35,11 @@ demo2: all
 	@/cub3D maps/spaces.cub
 
 clean:
-	@rm -f $(OBJ)
+	@/bin/rm -f $(OBJ)
 	@echo "\033[1;32m OBJECT FILES DELETED \033[0m"
 
 fclean : clean
-	@rm -f $(NAME)
+	@/bin/rm -f $(NAME)
 	@echo "\033[1;32m EXECUTABLE DELETED \033[0m"
 
 re : fclean all

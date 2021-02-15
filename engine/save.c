@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   save.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 19:51:37 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 20:56:06 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
 /*
@@ -13,10 +25,9 @@
 ** height in pixels (4)
 ** number of color planes (2)
 ** bits per pixel (2)
-** 
 */
 
-static void header_info(t_game *game, int fd, int *param, int *padding)
+static void	header_info(t_game *game, int fd, int *param, int *padding)
 {
 	if (write(fd, "BM", 2) < 0)
 		game_error(WRITE_ERR, &game);

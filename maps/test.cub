@@ -1,0 +1,19 @@
+F 206,128,84
+R 50     50
+
+C     35,51,66
+
+
+SO textures/bluestone.xpm
+
+EA textures/purplestone.xpm       
+
+S  textures/barrel.xpm    
+WE   textures/wood.xpm
+NO   textures/colorstone.xpm
+
+
+
+111
+1W1
+111

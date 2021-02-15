@@ -1,7 +1,18 @@
-#include "maze.h"
-//#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_config.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 11:20:00 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 11:26:03 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void parse_resolution(t_map *map)
+#include "maze.h"
+
+static void	parse_resolution(t_map *map)
 {
 	if (map->res[X])
 		map_error(RES_DOUBLE, &map);
@@ -13,7 +24,7 @@ static void parse_resolution(t_map *map)
 		map_error(RES_ERR, &map);
 }
 
-static void parse_ttr(t_map *map, int side)
+static void	parse_ttr(t_map *map, int side)
 {
 	int test_fd;
 
@@ -26,16 +37,16 @@ static void parse_ttr(t_map *map, int side)
 		map_error(MALLOC_PARSE, &map);
 }
 
-static int get_rgb(int red, int green, int blue)
+static int	get_rgb(int red, int green, int blue)
 {
 	return ((red <= 255 && green <= 255 && blue <= 255) ? \
 	(red << 16 | green << 8 | blue) : -1);
 }
 
-static void parse_color(t_map *map, int side)
+static void	parse_color(t_map *map, int side)
 {
-	char **colors;
-	size_t tokens;
+	char	**colors;
+	size_t	tokens;
 
 	if ((side == FLOOR && map->colors[GET_FLOOR]) || \
 		(side == CEILING && map->colors[GET_CEILING]))
@@ -56,14 +67,9 @@ static void parse_color(t_map *map, int side)
 	if (map->colors[side] < 0)
 		map_error(COLOR_0255, &map);
 	side == FLOOR ? map->colors[GET_FLOOR]++ : map->colors[GET_CEILING]++;
-
-	// printf("transparent : %d\n", (map->colors[side] & (0xFF << 24)));
-	// printf("red : %d\n", (map->colors[side] & (0xFF << 16)));
-	// printf("green : %d\n", (map->colors[side] & (0xFF << 8)));
-	// printf("blue : %d\n", (map->colors[side] & 0xFF));
 }
 
-void process_line(t_map *map, size_t first)
+void		process_line(t_map *map, size_t first)
 {
 	if (first == 1 && map->tokens == 3 && map->split[0][0] == 'R')
 		parse_resolution(map);

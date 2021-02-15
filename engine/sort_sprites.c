@@ -1,23 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_sprites.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 18:58:03 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 20:55:11 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
-/*
-** From farest to nearest
-*/
 static void	swap_coord(double *spr1, double *spr2, int pos, double **sprites)
 {
 	double tmp;
-	double tmpX;
-	double tmpY;
+	double tmpx;
+	double tmpy;
 
 	tmp = *spr1;
 	*spr1 = *spr2;
 	*spr2 = tmp;
-	tmpX = sprites[pos][X];
-	tmpY = sprites[pos][Y];
+	tmpx = sprites[pos][X];
+	tmpy = sprites[pos][Y];
 	sprites[pos][X] = sprites[pos + 1][X];
 	sprites[pos][Y] = sprites[pos + 1][Y];
-	sprites[pos + 1][X] = tmpX;
-	sprites[pos + 1][Y] = tmpY;
+	sprites[pos + 1][X] = tmpx;
+	sprites[pos + 1][Y] = tmpy;
 }
 
 void		sort_sprites(t_game *game)
@@ -28,13 +37,13 @@ void		sort_sprites(t_game *game)
 
 	far = (double *)malloc(sizeof(double) * game->numspr);
 	if (!far)
-		game_error(MALLOC_GAME, &game);
+		game_error(MLX_MALLOC, &game);
 	num = game->numspr;
 	while (num--)
-		far[num] = (game->pos[X] - game->sprites[num][X]) \
-		* (game->pos[X] - game->sprites[num][X]) \
-		+ (game->pos[Y] - game->sprites[num][Y]) \
-		* (game->pos[Y] - game->sprites[num][Y]);
+		far[num] = (game->player[X] - game->sprites[num][X]) \
+		* (game->player[X] - game->sprites[num][X]) \
+		+ (game->player[Y] - game->sprites[num][Y]) \
+		* (game->player[Y] - game->sprites[num][Y]);
 	num = game->numspr;
 	while (num--)
 	{

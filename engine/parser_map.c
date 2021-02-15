@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_map.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 11:20:11 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 22:33:22 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
 /*
@@ -10,7 +22,7 @@
 ** ^ Y
 */
 
-static void init_playerSW(char *player, t_map *map)
+static void	player_sw(char *player, t_map *map)
 {
 	if (*player == 'S')
 	{
@@ -19,16 +31,17 @@ static void init_playerSW(char *player, t_map *map)
 		map->plane[X] = -0.66;
 		map->plane[Y] = 0;
 	}
-	else
+	else if (*player == 'W')
 	{
 		map->dir[X] = -1;
 		map->dir[Y] = 0;
 		map->plane[X] = 0;
 		map->plane[Y] = -0.66;
 	}
+	map->player[GET_ALL]++;
 }
 
-static void find_player(t_map *map)
+static void	find_player(t_map *map)
 {
 	char *player;
 
@@ -52,13 +65,11 @@ static void find_player(t_map *map)
 			map->plane[X] = 0;
 			map->plane[Y] = 0.66;
 		}
-		else
-			init_playerSW(player, map);
-		map->player[GET_ALL]++;
+		player_sw(player, map);
 	}
 }
 
-void get_raw_map(t_map *map, int reading)
+void		get_raw_map(t_map *map, int reading)
 {
 	char *tmp_line;
 	char *tmp_map;
@@ -84,7 +95,7 @@ void get_raw_map(t_map *map, int reading)
 	ft_ptr_free((void **)&map->line);
 }
 
-void dfs_map(char **grid, int i, int j, t_map *map)
+void		dfs_map(char **grid, int i, int j, t_map *map)
 {
 	int j_len;
 

@@ -1,110 +1,121 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rays.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/15 12:07:43 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/02/15 19:21:46 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "maze.h"
 
-static void boarders_wall(int *start, int *end, int *height, t_game *game)
+static void		boarders_wall(t_game *game)
 {
-	*height = (int)(game->res[Y] / game->perpwalldist);
-	*start =  game->res[Y] / 2 - *height / 2;
-	*end = game->res[Y] / 2 + *height / 2;
-	*start = *start < 0 ? 0 : *start;
-	*end = *end >= game->res[Y] ? game->res[Y] - 1 : *end;
+	game->wallheight = (int)(game->res[Y] / game->dist);
+	game->wallstart = game->res[Y] / 2 - game->wallheight / 2;
+	game->wallend = game->res[Y] / 2 + game->wallheight / 2;
+	game->wallstart = game->wallstart < 0 ? 0 : game->wallstart;
+	game->wallend = game->wallend >= game->res[Y] ? \
+					game->res[Y] - 1 : game->wallend;
 }
 
-static void draw_slice(t_mlximg *wall, t_game *game, int ray)
+static void		draw_slice(t_mlximg *wall, t_game *game, int ray)
 {
-	int height;
-	int start;
-	int end;
-	int	hit_ttrX;
+	int		hit_ttrx;
 	double	where_hit;
-	double step;
-	double hit_ttrY;
+	double	step;
+	double	hit_ttry;
 
-	boarders_wall(&start, &end, &height, game);
-	where_hit = !game->side ? game->pos[Y] + game->perpwalldist * game->raydir[Y] : \
-	game->pos[X] + game->perpwalldist * game->raydir[X];
-	where_hit -= floor((where_hit));
-	hit_ttrX = (int)(where_hit * (double)(wall->img_width));
-	if ((!game->side && game->raydir[X] > 0) || \
-		(game->side && game->raydir[Y] < 0))
-		hit_ttrX = wall->img_width - hit_ttrX - 1;
-	step = 1.0 * wall->img_height / height;
-	while (start < end)
+	boarders_wall(game);
+	where_hit = !game->currside ? game->player[Y] + game->dist \
+	* game->ray[Y] : game->player[X] + game->dist * game->ray[X];
+	where_hit -= floor(where_hit);
+	hit_ttrx = (int)(where_hit * (double)(wall->img_width));
+	if ((!game->currside && game->ray[X] > 0) || \
+		(game->currside && game->ray[Y] < 0))
+		hit_ttrx = wall->img_width - hit_ttrx - 1;
+	step = 1.0 * wall->img_height / game->wallheight;
+	while (game->wallstart < game->wallend)
 	{
-		hit_ttrY = (256 * start - 128 * game->res[Y] + 128 * height) * step / 256;
-		game->maze->data[game->maze->img_width * start + ray] = \
-		wall->data[(int)hit_ttrY * wall->img_width + hit_ttrX];
-		start++;
+		hit_ttry = (256 * game->wallstart - 128 * game->res[Y] + \
+					128 * game->wallheight) * step / 256;
+		game->maze->data[game->maze->img_width * game->wallstart + ray] = \
+		wall->data[wall->img_width * (int)hit_ttry + hit_ttrx];
+		game->wallstart++;
 	}
 }
 
-static t_mlximg *get_slice(t_game *game, int ray)
+static t_mlximg	*get_slice(t_game *game, int ray)
 {
-	t_mlximg	*wall;
+	t_mlximg *wall;
 
-	game->perpwalldist = !game->side ? \
-	(game->square[X] - game->pos[X] + (1 - game->step[X]) / 2) / \
-	game->raydir[X] : \
-	(game->square[Y] - game->pos[Y] + (1 - game->step[Y]) / 2) / \
-	game->raydir[Y];
-	game->zbuffer[ray] = game->perpwalldist;
-	if (game->raydir[X] > 0 && game->raydir[Y] >= 0)
-		wall = !game->side ? game->ttrs[EA] : game->ttrs[SO];
-	if (game->raydir[X] > 0 && game->raydir[Y] < 0)
-		wall = !game->side ? game->ttrs[EA] : game->ttrs[NO];
-	if (game->raydir[X] <= 0 && game->raydir[Y] < 0)
-		wall = !game->side ? game->ttrs[WE] : game->ttrs[NO];
-	if (game->raydir[X] <= 0 && game->raydir[Y] >= 0)
-		wall = !game->side ? game->ttrs[WE] : game->ttrs[SO];
+	if (game->ray[X] > 0 && game->ray[Y] >= 0)
+		wall = !game->currside ? game->ttrs[EA] : game->ttrs[SO];
+	if (game->ray[X] > 0 && game->ray[Y] < 0)
+		wall = !game->currside ? game->ttrs[EA] : game->ttrs[NO];
+	if (game->ray[X] <= 0 && game->ray[Y] < 0)
+		wall = !game->currside ? game->ttrs[WE] : game->ttrs[NO];
+	if (game->ray[X] <= 0 && game->ray[Y] >= 0)
+		wall = !game->currside ? game->ttrs[WE] : game->ttrs[SO];
+	game->dist = !game->currside ? \
+	(game->square[X] - game->player[X] + (1 - game->dirmove[X]) / 2) / \
+	game->ray[X] : \
+	(game->square[Y] - game->player[Y] + (1 - game->dirmove[Y]) / 2) / \
+	game->ray[Y];
+	game->depth[ray] = game->dist;
 	return (wall);
 }
 
-static void	find_wall(t_game *game)
+static void		find_wall(t_game *game)
 {
-	int	hit;
+	int	wall;
 
-	hit = 0;
-	while (!hit)
+	wall = 0;
+	while (!wall)
 	{
-
-		if (game->sidedist[Y] < game->sidedist[X])
+		if (game->path[Y] < game->path[X])
 		{
-			game->sidedist[Y] += game->deltadist[Y];
-			game->square[Y] += game->step[Y];
-			game->side = 1;
+			game->path[Y] += game->next[Y];
+			game->square[Y] += game->dirmove[Y];
+			game->currside = 1;
 		}
-		else if (game->sidedist[X] < game->sidedist[Y])
+		else if (game->path[X] < game->path[Y])
 		{
-			game->sidedist[X] += game->deltadist[X];
-			game->square[X] += game->step[X];
-			game->side = 0;
+			game->path[X] += game->next[X];
+			game->square[X] += game->dirmove[X];
+			game->currside = 0;
 		}
 		if (game->map[game->square[Y]][game->square[X]] == '1')
-			hit++;
+			wall++;
 	}
 }
 
-void		throw_rays(t_game *game)
+void			throw_rays(t_game *game)
 {
-	int ray;
-	
+	int		ray;
+	double	plane_point;
+
 	ray = 0;
 	while (ray < game->res[X])
 	{
-		game->square[X] = (int)game->pos[X];
-		game->square[Y] = (int)game->pos[Y];
-		game->camerax = 2 * ray / (double)(game->res[X]) - 1;
-		game->raydir[X] = game->dir[X] + game->plane[X] * game->camerax;
-		game->raydir[Y] = game->dir[Y] + game->plane[Y] * game->camerax;
-		game->deltadist[X] = fabs(1 / game->raydir[X]);
-		game->deltadist[Y] = fabs(1 / game->raydir[Y]);
-		game->step[X] = game->raydir[X] > 0 ? 1 : -1;
-		game->sidedist[X] = game->raydir[X] > 0 ? \
-		(1.0 - (game->pos[X] - game->square[X])) * game->deltadist[X] : \
-		(game->pos[X] - game->square[X]) * game->deltadist[X];
-		game->step[Y] = game->raydir[Y] > 0 ? 1 : -1;
-		game->sidedist[Y] = game->raydir[Y] > 0 ? \
-		(1.0 - (game->pos[Y] - game->square[Y])) * game->deltadist[Y] : \
-		(game->pos[Y] - game->square[Y]) * game->deltadist[Y];
+		game->square[X] = (int)game->player[X];
+		game->square[Y] = (int)game->player[Y];
+		plane_point = 2 * ray / (double)(game->res[X]) - 1;
+		game->ray[X] = game->dir[X] + game->plane[X] * plane_point;
+		game->ray[Y] = game->dir[Y] + game->plane[Y] * plane_point;
+		game->next[X] = fabs(1 / game->ray[X]);
+		game->next[Y] = fabs(1 / game->ray[Y]);
+		game->dirmove[X] = game->ray[X] > 0 ? 1 : -1;
+		game->path[X] = game->ray[X] > 0 ? \
+		(1.0 - (game->player[X] - game->square[X])) * game->next[X] : \
+		(game->player[X] - game->square[X]) * game->next[X];
+		game->dirmove[Y] = game->ray[Y] > 0 ? 1 : -1;
+		game->path[Y] = game->ray[Y] > 0 ? \
+		(1.0 - (game->player[Y] - game->square[Y])) * game->next[Y] : \
+		(game->player[Y] - game->square[Y]) * game->next[Y];
 		find_wall(game);
 		draw_slice(get_slice(game, ray), game, ray);
 		ray++;
