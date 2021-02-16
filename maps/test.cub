@@ -1,19 +1,16 @@
-F 206,128,84
-R 50     50
-
-C     35,51,66
-
-
+R 500 500
+NO textures/colorstone.xpm
 SO textures/bluestone.xpm
+EA textures/purplestone.xpm
+WE textures/wood.xpm
 
-EA textures/purplestone.xpm       
+S textures/barrel.xpm
 
-S  textures/barrel.xpm    
-WE   textures/wood.xpm
-NO   textures/colorstone.xpm
+C 35,51,66
+F 206,128,84
 
-
-
-111
-1W1
-111
+1111
+10001
+100N1
+11111
+    2 

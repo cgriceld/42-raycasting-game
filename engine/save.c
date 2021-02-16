@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 19:51:37 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/15 20:56:06 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/16 19:24:23 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		save(t_game *game)
 		while (row < game->res[X])
 		{
 			if (write(fd, \
-				&(game->maze->data[(game->res[X]) * column + row++]), 4) < 0)
+				&game->maze->data[game->res[X] * column + row++], 4) < 0)
 				game_error(WRITE_ERR, &game);
 		}
 	}

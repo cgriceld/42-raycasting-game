@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:21:27 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/15 16:30:13 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/16 20:43:20 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,10 @@ static void	prepare_mlx(t_game *game)
 	mlx_get_screen_size(game->mlx, &sizex, &sizey);
 	game->res[X] = game->res[X] > sizex ? sizex : game->res[X];
 	game->res[Y] = game->res[Y] > sizey ? sizey : game->res[Y];
-	if (!(game->save & SAVE))
-	{
-		game->win = \
+	game->win = \
 			mlx_new_window(game->mlx, game->res[X], game->res[Y], TITLE);
-		if (!game->win)
+	if (!game->win)
 			game_error(MLX_NEWWIN, &game);
-	}
 	get_ttrs(game, NO);
 	get_ttrs(game, EA);
 	get_ttrs(game, SO);
@@ -79,8 +76,6 @@ int			main(int argc, char **argv)
 	parser(argv[1], &game);
 	game->save = save;
 	prepare_mlx(game);
-	if (game->save & SAVE)
-		play(game);
 	mlx_hook(game->win, 17, 0, &game_over, &game);
 	mlx_hook(game->win, 2, 0, &klick, game);
 	mlx_hook(game->win, 3, 0, &unclick, game);
