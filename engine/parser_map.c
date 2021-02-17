@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:20:11 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/15 22:33:22 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/17 14:06:04 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	player_sw(char *player, t_map *map)
 	map->player[GET_ALL]++;
 }
 
-static void	find_player(t_map *map)
+void		find_player(t_map *map)
 {
 	char *player;
 
@@ -95,7 +95,7 @@ void		get_raw_map(t_map *map, int reading)
 	ft_ptr_free((void **)&map->line);
 }
 
-void		dfs_map(char **grid, int i, int j, t_map *map)
+static void	dfs_pos(char **grid, int i, int j, t_map *map)
 {
 	int j_len;
 
@@ -109,10 +109,29 @@ void		dfs_map(char **grid, int i, int j, t_map *map)
 		return ;
 	if (grid[i][j] == '2')
 		grid[i][j] = '4';
-	if (grid[i][j] == '0')
+	if (grid[i][j] == '0' || ft_strchr(PLAYER_SET, grid[i][j]))
 		grid[i][j] = '3';
-	dfs_map(grid, i - 1, j, map);
-	dfs_map(grid, i, j - 1, map);
-	dfs_map(grid, i + 1, j, map);
-	dfs_map(grid, i, j + 1, map);
+	dfs_pos(grid, i - 1, j, map);
+	dfs_pos(grid, i, j - 1, map);
+	dfs_pos(grid, i + 1, j, map);
+	dfs_pos(grid, i, j + 1, map);
+}
+
+void		dfs_all(t_map *map)
+{
+	int		rows;
+	char	*line;
+
+	rows = map->tokens;
+	while (rows >= 0)
+	{
+		line = map->map[rows];
+		while (*line)
+		{
+			if (*line == '2' || *line == '0' || ft_strchr(PLAYER_SET, *line))
+				dfs_pos(map->map, rows, line - map->map[rows], map);
+			line++;
+		}
+		rows--;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/14 20:14:09 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/15 22:10:06 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/17 14:01:12 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,8 @@ typedef struct	s_game
 void			parser(const char *map_file, t_game **game);
 void			process_line(t_map *map, size_t first);
 void			get_raw_map(t_map *map, int reading);
-void			dfs_map(char **grid, int i, int j, t_map *map);
+void			find_player(t_map *map);
+void			dfs_all(t_map *map);
 void			init_map(t_map **map, const char *map_file);
 void			init_game(t_game **game, t_map *map);
 

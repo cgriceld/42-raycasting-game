@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:27:43 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/16 19:55:01 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/17 13:42:57 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	get_sprites(t_game **game)
 		line = (*game)->map[rows];
 		while (*line)
 		{
-			if (*line == '4' || *line == '2')
+			if (*line == '4')
 			{
 				(*game)->sprites[num] = (double *)malloc(sizeof(double) * 2);
 				if (!(*game)->sprites[num])

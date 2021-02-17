@@ -6,11 +6,12 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:19:49 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/15 11:24:23 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/17 14:06:11 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "maze.h"
+#include <stdio.h>
 
 static int	map_ready(t_map *map)
 {
@@ -28,8 +29,10 @@ static void	process_map(t_map *map)
 	map->raw_map = ft_strjoin(map->line, "\n");
 	if (!map->raw_map)
 		map_error(MALLOC_PARSE, &map);
-	ft_ptr_free((void **)&map->line);
+	find_player(map);
+	map->sprites += ft_numchstr(map->line, '2');
 	map->tokens = 0;
+	ft_ptr_free((void **)&map->line);
 	while ((reading = get_next_line(map->fd, &(map->line))))
 		get_raw_map(map, reading);
 	get_raw_map(map, reading);
@@ -37,9 +40,15 @@ static void	process_map(t_map *map)
 		map_error(NO_PLAYER, &map);
 	map->map = ft_split(map->raw_map, '\n');
 	ft_ptr_free((void **)&map->raw_map);
-	dfs_map(map->map, map->player[X], map->player[Y], map);
-	map->map[(int)map->player[X]][(int)map->player[Y]] = '3';
+	dfs_all(map);
 	map->map_done++;
+
+	int tmp = map->tokens;
+	while (tmp >= 0)
+	{
+		printf("%s\n", map->map[tmp]);
+		tmp--;
+	}
 }
 
 static void	process_parsing(t_map *map)

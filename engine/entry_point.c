@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:21:27 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/16 20:43:20 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/16 20:54:44 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static void	prepare_mlx(t_game *game)
 	game->res[X] = game->res[X] > sizex ? sizex : game->res[X];
 	game->res[Y] = game->res[Y] > sizey ? sizey : game->res[Y];
 	game->win = \
-			mlx_new_window(game->mlx, game->res[X], game->res[Y], TITLE);
+		mlx_new_window(game->mlx, game->res[X], game->res[Y], TITLE);
 	if (!game->win)
-			game_error(MLX_NEWWIN, &game);
+		game_error(MLX_NEWWIN, &game);
 	get_ttrs(game, NO);
 	get_ttrs(game, EA);
 	get_ttrs(game, SO);
