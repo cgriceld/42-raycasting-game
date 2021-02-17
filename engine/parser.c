@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:19:49 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/17 14:06:11 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/17 22:20:04 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static void	process_map(t_map *map)
 	dfs_all(map);
 	map->map_done++;
 
-	int tmp = map->tokens;
-	while (tmp >= 0)
-	{
-		printf("%s\n", map->map[tmp]);
-		tmp--;
-	}
+	// int tmp = map->tokens;
+	// while (tmp >= 0)
+	// {
+	// 	printf("%s\n", map->map[tmp]);
+	// 	tmp--;
+	// }
 }
 
 static void	process_parsing(t_map *map)

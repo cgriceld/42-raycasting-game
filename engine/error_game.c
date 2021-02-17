@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:38:25 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/16 20:55:32 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/17 22:21:18 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,7 @@ int			game_over(t_game **game)
 	(*game)->save & SAVE ? ft_putendl_fd(SAVED, 1) : \
 						ft_putendl_fd("GAME OVER", 1);
 	free_game(game);
+	// while (1)
+	// 	;
 	exit(EXIT_SUCCESS);
 }

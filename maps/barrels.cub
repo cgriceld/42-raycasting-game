@@ -1,4 +1,4 @@
-R 10 10
+R 800 200
 NO textures/colorstone.xpm
 SO textures/bluestone.xpm
 EA textures/purplestone.xpm
