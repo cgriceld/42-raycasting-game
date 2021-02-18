@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 18:58:12 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/17 13:43:28 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/18 12:56:47 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void		step_up(t_game *game)
 {
 	double move;
 
-	move = game->player[X] + 0.03 * game->dir[X];
+	move = game->player[X] + 0.09 * game->dir[X];
 	check_move(game, X, move);
-	move = game->player[Y] + 0.03 * game->dir[Y];
+	move = game->player[Y] + 0.09 * game->dir[Y];
 	check_move(game, Y, move);
 }
 
@@ -40,9 +40,9 @@ void		step_left(t_game *game)
 {
 	double move;
 
-	move = game->player[X] - 0.03 * game->plane[X];
+	move = game->player[X] - 0.09 * game->plane[X];
 	check_move(game, X, move);
-	move = game->player[Y] - 0.03 * game->plane[Y];
+	move = game->player[Y] - 0.09 * game->plane[Y];
 	check_move(game, Y, move);
 }
 
@@ -50,9 +50,9 @@ void		step_down(t_game *game)
 {
 	double move;
 
-	move = game->player[X] - 0.03 * game->dir[X];
+	move = game->player[X] - 0.09 * game->dir[X];
 	check_move(game, X, move);
-	move = game->player[Y] - 0.03 * game->dir[Y];
+	move = game->player[Y] - 0.09 * game->dir[Y];
 	check_move(game, Y, move);
 }
 
@@ -60,8 +60,8 @@ void		step_right(t_game *game)
 {
 	double move;
 
-	move = game->player[X] + 0.03 * game->plane[X];
+	move = game->player[X] + 0.09 * game->plane[X];
 	check_move(game, X, move);
-	move = game->player[Y] + 0.03 * game->plane[Y];
+	move = game->player[Y] + 0.09 * game->plane[Y];
 	check_move(game, Y, move);
 }

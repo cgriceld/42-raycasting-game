@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 18:58:29 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/15 20:59:14 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/18 12:56:52 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void	turn_right(t_game *game)
 
 	planeprev[X] = game->plane[X];
 	dirprev[X] = game->dir[X];
-	game->plane[X] = game->plane[X] * cos(0.03) - game->plane[Y] * sin(0.03);
-	game->plane[Y] = planeprev[X] * sin(0.03) + game->plane[Y] * cos(0.03);
-	game->dir[X] = game->dir[X] * cos(0.03) - game->dir[Y] * sin(0.03);
-	game->dir[Y] = dirprev[X] * sin(0.03) + game->dir[Y] * cos(0.03);
+	game->plane[X] = game->plane[X] * cos(0.09) - game->plane[Y] * sin(0.09);
+	game->plane[Y] = planeprev[X] * sin(0.09) + game->plane[Y] * cos(0.09);
+	game->dir[X] = game->dir[X] * cos(0.09) - game->dir[Y] * sin(0.09);
+	game->dir[Y] = dirprev[X] * sin(0.09) + game->dir[Y] * cos(0.09);
 }
 
 void	turn_left(t_game *game)
@@ -39,8 +39,8 @@ void	turn_left(t_game *game)
 
 	planeprev[X] = game->plane[X];
 	dirprev[X] = game->dir[X];
-	game->plane[X] = game->plane[X] * cos(-0.03) - game->plane[Y] * sin(-0.03);
-	game->plane[Y] = planeprev[X] * sin(-0.03) + game->plane[Y] * cos(-0.03);
-	game->dir[X] = game->dir[X] * cos(-0.03) - game->dir[Y] * sin(-0.03);
-	game->dir[Y] = dirprev[X] * sin(-0.03) + game->dir[Y] * cos(-0.03);
+	game->plane[X] = game->plane[X] * cos(-0.09) - game->plane[Y] * sin(-0.09);
+	game->plane[Y] = planeprev[X] * sin(-0.09) + game->plane[Y] * cos(-0.09);
+	game->dir[X] = game->dir[X] * cos(-0.09) - game->dir[Y] * sin(-0.09);
+	game->dir[Y] = dirprev[X] * sin(-0.09) + game->dir[Y] * cos(-0.09);
 }

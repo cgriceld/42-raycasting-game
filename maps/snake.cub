@@ -2,17 +2,20 @@ R 500 500
 NO textures/colorstone.xpm
 SO textures/bluestone.xpm
 EA textures/purplestone.xpm
-WE textures/wood.xpm
+WE textures/dark.xpm
 
 S textures/barrel.xpm
 
-C 232,224,178
+C 35,51,66
 F 198,136,74
 
 1111  11111111
 1N01 100000001 1111111111
-1001 101111001 1000200021
+1001 101111001 1000200201
 10011101  101  1020002001
 10000001  101111011111111
- 111111   10000001
-           1111111
+ 111111   100000001
+        1100011021
+        11021  111
+        1000011
+         1111
