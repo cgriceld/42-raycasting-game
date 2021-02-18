@@ -13,7 +13,8 @@ SRC =	engine/entry_point.c engine/sort_sprites.c \
 		engine/save.c engine/sprites.c \
 		engine/utils/ft_split.c engine/utils/gnl_utils.c \
 		engine/utils/gnl.c engine/utils/memory.c engine/utils/puts.c \
-		engine/utils/search.c engine/utils/strings.c engine/utils/types.c
+		engine/utils/search.c engine/utils/strings.c engine/utils/types.c \
+		engine/utils/ft_strtrim.c
 
 OBJ = $(SRC:.c=.o)
 

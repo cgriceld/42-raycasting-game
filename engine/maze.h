@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/14 20:14:09 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/17 14:01:12 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/18 19:22:23 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 /*
 ** Map parsing errors
 */
-# define NO_MAP "map .cub : map missing or consists of one line only"
+# define NO_MAP "map .cub : map missing or wrong or config missing"
 # define MAP_EMPTY_LINE "map .cub : empty lines inside or below the map"
 # define UNKNOWN_CH_MAP "map .cub : map must consists only of [ 012NSEW]"
 # define TWO_PLAYERS "map .cub : map contains two or more players"
@@ -249,6 +249,7 @@ int				get_next_line(int fd, char **line);
 int				subcache(char **cache, char *n);
 char			*nchr(const char *s);
 int				lstdelone(t_lstfd **head, const int fd);
+char			*ft_strtrim(char const *s1, char const *set);
 char			**ft_split(char const *s, char c);
 size_t			ft_strlen(const char *s);
 char			*ft_strjoin(char const *s1, char const *s2);
