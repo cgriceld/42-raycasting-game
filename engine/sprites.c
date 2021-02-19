@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 15:51:13 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/18 20:48:55 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/19 17:07:38 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ void		sprites(t_game *game)
 			tmp++;
 			continue;
 		}
-		game->spr->width = (int)(game->res[Y] / proj[Y]);
-		game->spr->height = game->spr->width;
+		game->spr->width = (int)(game->res[X] / proj[Y]);
+		game->spr->height = (int)(game->res[Y] / proj[Y]);
 		game->spr->wherex = (int)((game->res[X] / 2) * (1 + proj[X] / proj[Y]));
 		draw_item(game, proj[Y]);
 		tmp++;

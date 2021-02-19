@@ -1,4 +1,4 @@
-R  100 500
+    R  300 300     
 NO textures/colorstone.xpm
 SO textures/bluestone.xpm
 EA textures/purplestone.xpm
@@ -6,14 +6,14 @@ WE textures/dark.xpm
 
 S textures/barrel.xpm
 
-C 35,51,66
-F 206,128,84
+C 35   , 51  ,   66
+  F 206 ,, 128 84   
 
      
 11111111111111
 10000022000221
 12222222222221   
-10000000000S00111111
+1000000N000000111111
 11111100000000000001     1
 100000000000000000001   121
 10000110000000000021     1
