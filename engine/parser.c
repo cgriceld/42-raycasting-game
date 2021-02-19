@@ -6,7 +6,7 @@
 /*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:19:49 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/17 22:20:04 by cgriceld         ###   ########.fr       */
+/*   Updated: 2021/02/19 12:20:57 by cgriceld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static void	process_parsing(t_map *map)
 	if (!map->split)
 		map_error(MALLOC_PARSE, &map);
 	map->tokens = (int)ft_twodarr_len((void **)map->split);
+	if (!map->tokens)
+		map_error(UNKNOWN_CH, &map);
 	first = ft_strlen(map->split[0]);
 	process_line(map, first);
 	ft_twodarr_free((void ***)&map->split, map->tokens);
