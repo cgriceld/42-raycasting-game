@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_config.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/15 11:20:00 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/18 19:32:04 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "maze.h"
 
 static void	parse_resolution(t_map *map)
@@ -44,25 +32,6 @@ static int	get_rgb(int red, int green, int blue)
 	(red << 16 | green << 8 | blue) : -1);
 }
 
-static int	check_t(char **colors, size_t tokens)
-{
-	char *tmp;
-
-	while (tokens--)
-	{
-		tmp = ft_strtrim(colors[tokens], " ");
-		if (!tmp)
-			return (1);
-		if (!*tmp || !ft_strdigits(tmp))
-		{
-			free(tmp);
-			return (1);
-		}
-		free(tmp);
-	}
-	return (0);
-}
-
 static void	parse_color(t_map *map, int side)
 {
 	char	**colors;
@@ -79,7 +48,7 @@ static void	parse_color(t_map *map, int side)
 	colors = ft_split(++start, ',');
 	if (!colors)
 		map_error(MALLOC_PARSE, &map);
-	if ((tokens = ft_twodarr_len((void **)colors)) != 3 || check_t(colors, tokens))
+	if ((tokens = ft_twodarr_len((void **)colors)) != 3 || cht(colors, tokens))
 	{
 		ft_twodarr_free((void ***)&colors, tokens);
 		map_error(COLOR_ERR, &map);

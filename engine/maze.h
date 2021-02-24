@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   maze.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/14 20:14:09 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/18 19:22:23 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MAZE_H
 # define MAZE_H
 
@@ -209,6 +197,7 @@ typedef struct	s_game
 */
 void			parser(const char *map_file, t_game **game);
 void			process_line(t_map *map, size_t first);
+int				cht(char **colors, size_t tokens);
 void			get_raw_map(t_map *map, int reading);
 void			find_player(t_map *map);
 void			dfs_all(t_map *map);

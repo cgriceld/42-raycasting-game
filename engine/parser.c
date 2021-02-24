@@ -1,17 +1,23 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/15 11:19:49 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/19 12:20:57 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "maze.h"
-#include <stdio.h>
+
+int			cht(char **colors, size_t tokens)
+{
+	char *tmp;
+
+	while (tokens--)
+	{
+		tmp = ft_strtrim(colors[tokens], " ");
+		if (!tmp)
+			return (1);
+		if (!*tmp || !ft_strdigits(tmp))
+		{
+			free(tmp);
+			return (1);
+		}
+		free(tmp);
+	}
+	return (0);
+}
 
 static int	map_ready(t_map *map)
 {
@@ -39,16 +45,11 @@ static void	process_map(t_map *map)
 	if (!map->player[GET_ALL])
 		map_error(NO_PLAYER, &map);
 	map->map = ft_split(map->raw_map, '\n');
+	if (!map->map)
+		map_error(MALLOC_PARSE, &map);
 	ft_ptr_free((void **)&map->raw_map);
 	dfs_all(map);
 	map->map_done++;
-
-	// int tmp = map->tokens;
-	// while (tmp >= 0)
-	// {
-	// 	printf("%s\n", map->map[tmp]);
-	// 	tmp--;
-	// }
 }
 
 static void	process_parsing(t_map *map)
@@ -80,7 +81,7 @@ void		parser(const char *map_file, t_game **game)
 		if (!(*map->line))
 		{
 			ft_ptr_free((void **)&map->line);
-			continue ;
+			continue;
 		}
 		map_ready(map) ? process_map(map) : process_parsing(map);
 	}

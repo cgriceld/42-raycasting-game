@@ -1,16 +1,16 @@
-    R  300 300     
+R  600 600
+
 NO textures/colorstone.xpm
-SO textures/bluestone.xpm
+SO textures/dark.xpm
 EA textures/purplestone.xpm
-WE textures/dark.xpm
+WE textures/bluestone.xpm
 
 S textures/barrel.xpm
 
-C 35   , 51  ,   66
-  F 206 ,, 128 84   
+C 21,21,21
+F 42,42,42
 
-     
-11111111111111
+ 1111111111111
 10000022000221
 12222222222221   
 1000000N000000111111
@@ -21,4 +21,3 @@ C 35   , 51  ,   66
  11021100002200022021
    11020022220000221
      111111111111111
-                        

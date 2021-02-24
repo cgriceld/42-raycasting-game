@@ -36,7 +36,7 @@ demo1: all
 	@./cub3D maps/barrels.cub
 
 demo2: all
-	@./cub3D maps/spaces.cub
+	@./cub3D maps/subj.cub
 
 clean:
 	@/bin/rm -f $(OBJ)
@@ -45,7 +45,7 @@ clean:
 fclean : clean
 	@/bin/rm -f $(NAME)
 	@/bin/rm -f $(SAVE)
-	#@make -C $(MLXDIR) clean
+	@make -C $(MLXDIR) clean
 	@echo "\033[1;32m EXECUTABLE DELETED \033[0m"
 
 re : fclean all

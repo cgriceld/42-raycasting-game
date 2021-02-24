@@ -1,23 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   error_map.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/15 11:36:15 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/19 17:55:20 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "maze.h"
 
 void	lite_error(char *comment)
 {
 	ft_putendl_fd("Error", 1);
 	ft_putendl_fd(comment, 1);
-	// while (1)
-	// 	;
 	exit(EXIT_FAILURE);
 }
 

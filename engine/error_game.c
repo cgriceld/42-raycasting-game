@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   error_game.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <cgriceld@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/15 11:38:25 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/02/19 18:04:16 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "maze.h"
 
 static void	free_mlximg(t_game **game, int len)
@@ -60,7 +48,5 @@ int			game_over(t_game **game)
 	(*game)->save & SAVE ? ft_putendl_fd(SAVED, 1) : \
 						ft_putendl_fd("GAME OVER", 1);
 	free_game(game);
-	// while (1)
-	// 	;
 	exit(EXIT_SUCCESS);
 }
