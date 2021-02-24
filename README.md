@@ -15,6 +15,7 @@ Graphical 42 project. The code is written in accordance with The Norm (42 coding
 * *`make demo2`* -- same to `make demo1`, but with `subj.cub` map.
 * *`clean`* -- deletes object files.
 * *`fclean`* -- deletes object files, `cub3D`, `cub3D.bmp` and runs `clean` rule in `mlx` folder.
+* *`re`* -- runs `fclean` and recompiles.
 
 ## launching
 
