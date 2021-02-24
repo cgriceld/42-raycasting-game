@@ -4,7 +4,7 @@
 Graphical 42 project. The code is written in accordance with The Norm (42 coding style).
 
 ## project structure
-* *`engine` folder* -- source files (`utils` folder contains some library functions from [libft](https://github.com/linpoa/libft)).
+* *`engine` folder* -- source files (`utils` folder contains some functions from my own C library [libft](https://github.com/linpoa/libft)).
 * *`maps` folder* -- `.cub` files with map examples.
 * *`mlx` folder* -- 42 graphical library.
 * *`textures` folder* -- wall and sprite textures, taken from Wolfenstein 3D, copyright by ID Software.
