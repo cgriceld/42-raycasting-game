@@ -1,7 +1,7 @@
 # cub3D
 
 **Raycasting game inspired by Wolfenstein 3D**\
-The code is written in accordance with The Norm (42 coding style).
+Graphical 42 project. The code is written in accordance with The Norm (42 coding style).
 
 ## project structure
 * *`engine` folder* -- source files (`utils` folder contains some library functions from [libft](https://github.com/linpoa/libft)).
