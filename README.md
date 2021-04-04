@@ -1,10 +1,12 @@
-# cub3D
+# Raycasting game
 
 **Raycasting game inspired by Wolfenstein 3D**\
 Graphical 42 project. The code is written in accordance with The Norm (42 coding style).
+Raycasting algorithm is done using [this](https://lodev.org/cgtutor/raycasting.html) tutorial, but with some my improvements and optimizations.
+Besides the raycasting algorithm itself, the project includes most of the parsing and an error handling manager for invalid input data.
 
 ## project structure
-* *`engine` folder* -- source files (`utils` folder contains some functions from my own C library [libft](https://github.com/linpoa/libft)).
+* *`engine` folder* -- source files (`utils` folder contains some functions from my own [C library](https://github.com/linpoa/libft).
 * *`maps` folder* -- `.cub` files with map examples.
 * *`mlx` folder* -- 42 graphical library.
 * *`textures` folder* -- wall and sprite textures, taken from Wolfenstein 3D, copyright by ID Software.
@@ -46,7 +48,3 @@ Map can consists from 4 possible characters -- space, 1 for wall, 0 for blank sp
 
 Use WASD for moving, left arrow to turn head to the left and right arrow to turn head to the right.
 Press red cross on the window or ESC to quit.
-
-## additional
-
-Raycasting part is done using [this](https://lodev.org/cgtutor/raycasting.html) tutorial.
