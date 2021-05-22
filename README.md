@@ -1,7 +1,7 @@
 # Raycasting game
 
 **Raycasting game inspired by Wolfenstein 3D**\
-Graphical 42 project. The code is written in accordance with The Norm (42 coding style).\
+42 graphical project. The code is written in accordance with The Norm (42 coding style).\
 Raycasting algorithm is done using [this](https://lodev.org/cgtutor/raycasting.html) tutorial, but with some my improvements and optimizations.\
 Besides the raycasting algorithm itself, the project includes most of the parsing and an error handling manager for invalid input data.
 
