@@ -3,7 +3,8 @@
 **Raycasting game inspired by Wolfenstein 3D**\
 42 graphical project. The code is written in accordance with The Norm (42 coding style).\
 Raycasting algorithm is done using [this](https://lodev.org/cgtutor/raycasting.html) tutorial, but with some my improvements and optimizations.\
-Besides the raycasting algorithm itself, the project includes most of the parsing and an error handling manager for invalid input data.
+Besides the raycasting algorithm itself, the project includes most of the parsing and an error handling manager for invalid input data.\
+Works on Mac OS only.
 
 <img width="597" alt="cub3d" src="https://user-images.githubusercontent.com/62188694/118179348-db4a0c80-b43d-11eb-8e41-750582ae6d3f.png">
 
